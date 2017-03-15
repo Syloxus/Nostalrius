@@ -345,13 +345,6 @@ else()
   message(STATUS "Build in debug-mode   : No  (default)")
 endif()
 
-if(USE_ANTICHEAT)
-  message(STATUS "Use anticheat    : Yes")
-  set(DEFINITIONS ${DEFINITIONS} USE_ANTICHEAT)
-else()
-  message(STATUS "Use anticheat    : No  (default)")
-endif()
-
 if(SCRIPTS)
   message(STATUS "Build scripts    : Yes (default)")
 else()
