@@ -103,7 +103,7 @@ class Antispam : public AntispamInterface
         void loadMuted();
         
         std::string normalizeMessage(const std::string& msg, uint32 mask = 0);
-        bool filterMessage(const std::string &msg);
+        uint8 filterMessage(const std::string &msg);
         
         void addMessage(const std::string& msg, uint32 type, PlayerPointer from, PlayerPointer to);
 

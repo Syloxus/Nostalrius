@@ -380,7 +380,7 @@ std::string Antispam::normalizeMessage(const std::string& msg, uint32 mask)
     return newMsg;
 }
 
-bool Antispam::filterMessage(const std::string &msg)
+uint8 Antispam::filterMessage(const std::string &msg)
 {
     auto normMsg = normalizeMessage(msg);
     auto origMsg = normalizeMessage(msg, m_originalNormalizeMask);
