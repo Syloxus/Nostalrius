@@ -433,27 +433,26 @@ else()
   )
 endif()
 
-if(USE_ANTICHEAT)
-  list(APPEND game_SRCS
-      Anticheat/module/libanticheat.cpp
-      Anticheat/module/libanticheat.h
-      Anticheat/module/Antispam/Antispam.cpp
-      Anticheat/module/Antispam/Antispam.h
-      Anticheat/module/MovementAnticheat/Cheat.cpp
-      Anticheat/module/MovementAnticheat/Cheat.h
-      Anticheat/module/WardenAnticheat/Warden.cpp
-      Anticheat/module/WardenAnticheat/Warden.h
-      Anticheat/module/WardenAnticheat/WardenMac.cpp
-      Anticheat/module/WardenAnticheat/WardenMac.h
-      Anticheat/module/WardenAnticheat/WardenWin.cpp
-      Anticheat/module/WardenAnticheat/WardenWin.h
-      Anticheat/module/WardenAnticheat/WardenStorageMgr.cpp
-      Anticheat/module/WardenAnticheat/WardenStorageMgr.h
-      Anticheat/module/WardenAnticheat/WardenModuleMac.h
-      Anticheat/module/WardenAnticheat/WardenModuleWin.h
-      Anticheat/module/WardenAnticheat/WardenKeyGeneration.h
-  )
-endif()
+
+list(APPEND game_SRCS
+    Anticheat/module/libanticheat.cpp
+    Anticheat/module/libanticheat.h
+    Anticheat/module/Antispam/Antispam.cpp
+    Anticheat/module/Antispam/Antispam.h
+    Anticheat/module/MovementAnticheat/Cheat.cpp
+    Anticheat/module/MovementAnticheat/Cheat.h
+    Anticheat/module/WardenAnticheat/Warden.cpp
+    Anticheat/module/WardenAnticheat/Warden.h
+    Anticheat/module/WardenAnticheat/WardenMac.cpp
+    Anticheat/module/WardenAnticheat/WardenMac.h
+    Anticheat/module/WardenAnticheat/WardenWin.cpp
+    Anticheat/module/WardenAnticheat/WardenWin.h
+    Anticheat/module/WardenAnticheat/WardenStorageMgr.cpp
+    Anticheat/module/WardenAnticheat/WardenStorageMgr.h
+    Anticheat/module/WardenAnticheat/WardenModuleMac.h
+    Anticheat/module/WardenAnticheat/WardenModuleWin.h
+    Anticheat/module/WardenAnticheat/WardenKeyGeneration.h
+)
 
 
 include_directories(
