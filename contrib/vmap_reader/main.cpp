@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
     VMapManager2* manager = new VMapManager2();
 
-    printf("* Chargement de la map %u ...\n", mapId);
+    printf("* Loading map %u ...\n", mapId);
 
     for (int i = 0; i < 64; ++i)
         for (int j = 0; j < 64; ++j)
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
             }
 //*/
 
-    printf("* Transformation des donnees ... \n");
+    printf("* Data transformation ... \n");
     FILE* output = fopen("out.obj", "w");
     FILE* _3ds    = fopen("out.3ds", "wb");
     if (!output || !_3ds)
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 
     if (!instanceTrees[mapId])
     {
-        printf("Pas de modeles sur cette map. Abandon.\n");
+        printf("No models on this map. Abandonment.\n");
         fclose(_3ds);
         fclose(output);
         return 2;
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
         fclose(output);
         return 3;
     }
-    printf("* Il y a %u models sur cette map.\n", count);
+    printf("* There is %u models on this map.\n", count);
 
     vector<Vector3> vertices;
     vector<MeshTriangle> triangles;
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
                 it2->idx1 = verticesRemap[it2->idx1];
                 it2->idx2 = verticesRemap[it2->idx2];
             }
-            // Ajout des triangles ...
+            // Add triangles ...
             uint32 idxShift = vertices.size();
             for (vector<MeshTriangle>::iterator it2 = _triangles.begin(); it2 != _triangles.end(); ++it2)
             {
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
                 MeshTriangle t(it2->idx0+idxShift, it2->idx1+idxShift, it2->idx2+idxShift);
                 triangles.push_back(t);
             }
-            // Ajout des vertices
+            // Adding vertices
             for (vector<Vector3>::iterator it2 = _vertices.begin(); it2 != _vertices.end(); ++it2)
             {
                 Vector3 vect((*it2)*rotation*scale + position);
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
     printf("* %u vertices de %u triangles\n", vertices.size(), triangles.size());
     printf("%uko de memoire.\n", uint32((vertices.size()*sizeof(Vector3)+triangles.size()*sizeof(MeshTriangle))/1000.0f));
 
-    // Ecriture des fichiers ;
+    // Writing files ;
     // 3ds
     uint16 nTriangles = triangles.size();
     uint16 nVertices  = nTriangles*3;

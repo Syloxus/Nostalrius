@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +104,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
         }
         default:
         {
-            sLog.outError("%s is unsupported for looting.", lguid.GetString().c_str());
+            sLog.outError("%s is unsupported for looting. (%s)", lguid.GetString().c_str(), player->GetObjectGuid().GetString().c_str());
             return;
         }
     }
@@ -142,7 +144,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
         Item * newitem = player->StoreNewItem(dest, item->itemid, true, item->randomPropertyId);
         if (!newitem)
         {
-            sLog.nostalrius("Unable to store loot item #%u from %s !", item->itemid, lguid.GetString().c_str());
+            sLog.outInfo("Unable to store loot item #%u from %s !", item->itemid, lguid.GetString().c_str());
             return;
         }
 

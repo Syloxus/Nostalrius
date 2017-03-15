@@ -1,5 +1,4 @@
-SQL Migration File Format
---------------------------
+# SQL Migration File Format
 
 SQL Migration is an ordinary SQL file.
 

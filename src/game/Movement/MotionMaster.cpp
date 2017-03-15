@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +25,7 @@
 
 #include "ConfusedMovementGenerator.h"
 #include "FleeingMovementGenerator.h"
+#include "FearMovementGenerator.h"
 #include "HomeMovementGenerator.h"
 #include "IdleMovementGenerator.h"
 #include "PointMovementGenerator.h"
@@ -411,6 +414,22 @@ void MotionMaster::MoveFleeing(Unit* enemy, uint32 time)
             Mutate(new TimedFleeingMovementGenerator(enemy->GetObjectGuid(), time));
         else
             Mutate(new FleeingMovementGenerator<Creature>(enemy->GetObjectGuid()));
+    }
+}
+
+void MotionMaster::MoveFeared(Unit* enemy, uint32 time)
+{
+    if (!enemy)
+        return;
+
+    if (m_owner->GetTypeId() == TYPEID_PLAYER)
+        Mutate(new FearMovementGenerator<Player>(enemy->GetObjectGuid()));
+    else
+    {
+        if (time)
+            Mutate(new TimedFearMovementGenerator(enemy->GetObjectGuid(), time));
+        else
+            Mutate(new FearMovementGenerator<Creature>(enemy->GetObjectGuid()));
     }
 }
 

@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -639,9 +641,9 @@ void Master::_OnSignal(int s)
             sWorld.SetAnticrashRearmTimer(sWorld.getConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER));
             uint32 anticrashOptions = sWorld.getConfig(CONFIG_UINT32_ANTICRASH_OPTIONS);
             // Log crash stack
-            sLog.nostalrius("Received SIGSEGV");
+            sLog.outInfo("Received SIGSEGV");
             ACE_Stack_Trace st;
-            sLog.nostalrius("%s", st.c_str());
+            sLog.outInfo("%s", st.c_str());
             if (anticrashOptions & ANTICRASH_GENERATE_COREDUMP)
                 createdump();
             if (anticrashOptions & ANTICRASH_OPTION_ANNOUNCE_PLAYERS)

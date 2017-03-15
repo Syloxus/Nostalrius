@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -227,7 +229,7 @@ inline bool IsDeathOnlySpell(SpellEntry const *spellInfo)
 
 inline bool IsDeathPersistentSpell(SpellEntry const *spellInfo)
 {
-    return (spellInfo->AttributesEx3 & SPELL_ATTR_EX3_DEATH_PERSISTENT) || (spellInfo->Attributes & 0x80);
+    return spellInfo->HasAttribute(SPELL_ATTR_EX3_DEATH_PERSISTENT);
 }
 
 inline bool IsNonCombatSpell(SpellEntry const *spellInfo)
@@ -433,7 +435,7 @@ inline bool IsNeedCastSpellAtFormApply(SpellEntry const* spellInfo, ShapeshiftFo
 inline bool IsReflectableSpell(SpellEntry const* spellInfo)
 {
     return spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !spellInfo->HasAttribute(SPELL_ATTR_IS_ABILITY)
-      && !spellInfo->HasAttribute(SPELL_ATTR_EX_NEGATIVE) && !spellInfo->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
+      && !spellInfo->HasAttribute(SPELL_ATTR_EX_CANT_BE_REFLECTED) && !spellInfo->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
       && !spellInfo->HasAttribute(SPELL_ATTR_PASSIVE) && !IsPositiveSpell(spellInfo);
 }
 

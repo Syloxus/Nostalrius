@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +50,7 @@ bool Config::GetValueHelper(const char* name, ACE_TString &result)
 }
 
 Config::Config()
-: mConf(NULL)
+: mConf(nullptr)
 {
 }
 
@@ -77,7 +79,7 @@ bool Config::Reload()
     }
 
     delete mConf;
-    mConf = NULL;
+    mConf = nullptr;
     return false;
 }
 

@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -211,7 +213,7 @@ bool Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
         newmember.ZoneId = data->uiZoneId;
         newmember.accountId = data->uiAccount;
 
-        if (newmember.Level < 1 || newmember.Level > STRONG_MAX_LEVEL ||
+        if (newmember.Level < 1 || newmember.Level > DEFAULT_MAX_LEVEL ||
                 !((1 << (newmember.Class - 1)) & CLASSMASK_ALL_PLAYABLE))
         {
             sLog.outError("%s has a broken data in field `characters` table, cannot add him to guild.", plGuid.GetString().c_str());
@@ -437,7 +439,7 @@ bool Guild::LoadMembersFromDB(QueryResult *guildMembersResult)
         newmember.accountId             = fields[10].GetInt32();
 
         // this code will remove not existing character guids from guild
-        if (newmember.Level < 1 || newmember.Level > STRONG_MAX_LEVEL) // can be at broken `data` field
+        if (newmember.Level < 1 || newmember.Level > DEFAULT_MAX_LEVEL) // can be at broken `data` field
         {
             sLog.outError("%s has a broken data in field `characters`.`data`, deleting him from guild!", newmember.guid.GetString().c_str());
             CharacterDatabase.PExecute("DELETE FROM guild_member WHERE guid = '%u'", lowguid);

@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -891,7 +893,7 @@ bool IsPositiveEffect(SpellEntry const *spellproto, SpellEffectIndex effIndex)
         return false;
 
     // Attributes check
-    if (spellproto->Attributes & SPELL_ATTR_NEGATIVE_1)
+    if (spellproto->Attributes & SPELL_ATTR_NEGATIVE)
         return false;
 
     // ok, positive
@@ -909,7 +911,7 @@ bool IsPositiveSpell(uint32 spellId)
 
 bool IsPositiveSpell(SpellEntry const *spellproto)
 {
-    if (spellproto->Attributes & SPELL_ATTR_NEGATIVE_1)
+    if (spellproto->Attributes & SPELL_ATTR_NEGATIVE)
         return false;
     // spells with at least one negative effect are considered negative
     // some self-applied spells have negative effects but in self casting case negative check ignored.
@@ -4259,9 +4261,12 @@ void SpellMgr::LoadSpells()
         {
             SpellEntry* newSpell = new SpellEntry();
             if (!newSpell->Load(spellEntry))
+            {
+                delete newSpell;
                 continue;
+            }
             mSpellEntryMap[i] = newSpell;
         }
     }
-    sLog.outString("%u spells loaded in %ums.", WorldTimer::getMSTimeDiffToNow(oldMSTime));
+    sLog.outString("%u spells loaded in %ums.", mSpellEntryMap.size(), WorldTimer::getMSTimeDiffToNow(oldMSTime));
 }

@@ -1,8 +1,9 @@
 /*
 SQLyog Ultimate
-MySQL - 5.7.14-log : Database - nost_logs
+MySQL - 5.5.53-0+deb8u1-log : Database - logs
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -26,7 +27,7 @@ CREATE TABLE `logs_battleground` (
   `deaths` int(11) DEFAULT NULL,
   `honorBonus` int(11) DEFAULT NULL,
   `honorableKills` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `logs_behavior` */
 
@@ -38,7 +39,7 @@ CREATE TABLE `logs_behavior` (
   `detection` varchar(255) NOT NULL,
   `data` varchar(255) NOT NULL,
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `logs_characters` */
 
@@ -132,6 +133,21 @@ CREATE TABLE `logs_trashcharacters` (
   `cluster` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Table structure for table `smartlog_creature` */
+
+DROP TABLE IF EXISTS `smartlog_creature`;
+
+CREATE TABLE `smartlog_creature` (
+  `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `type` ENUM('Death','LongCombat','ScriptInfo','') NOT NULL DEFAULT '',
+  `entry` INT(11) NOT NULL DEFAULT '0',
+  `guid` INT(11) NOT NULL DEFAULT '0',
+  `specifier` VARCHAR(255) NOT NULL DEFAULT '',
+  `combatTime` INT(11) NOT NULL DEFAULT '0',  
+  `content` VARCHAR(255) NOT NULL DEFAULT '',
+  KEY `entry` (`entry`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `migrations` */
 

@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +30,7 @@
 #include "WorldPacket.h"
 #include "Language.h"
 #include "MapManager.h"
+#include "World.h"
 
 BattleGroundWS::BattleGroundWS()
 {
@@ -543,9 +546,13 @@ void BattleGroundWS::Reset()
         m_TeamScores[i]      = 0;
     }
     bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
-    // [-PROGRESSIVE]
-    //m_ReputationCapture = (isBGWeekend) ? 45 : 35; // 1.10+
-    m_ReputationCapture = (isBGWeekend) ? 30 : 20; // 1.9-
+
+    m_ReputationCapture = (isBGWeekend) ? 45 : 35;
+
+    // [-PROGRESSIVE] < 1.10
+    if (sWorld.GetWowPatch() < WOW_PATCH_110)
+        m_ReputationCapture = (isBGWeekend) ? 30 : 20;
+
     m_HonorWinKills = (isBGWeekend) ? 3 : 1;
     m_HonorEndKills = (isBGWeekend) ? 4 : 2;
 }

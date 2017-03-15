@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1228,7 +1230,10 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
 
     SetLevel(petlevel);
 
-    SetMeleeDamageSchool(SpellSchools(cinfo->dmgschool));
+    if (sWorld.GetWowPatch() < WOW_PATCH_109)
+        SetMeleeDamageSchool(SpellSchools(cinfo->dmgschool));
+    else
+        SetMeleeDamageSchool(SPELL_SCHOOL_NORMAL);
 
     SetModifierValue(UNIT_MOD_ARMOR, BASE_VALUE, float(petlevel * 50));
 
@@ -1807,8 +1812,6 @@ void Pet::_SaveAuras()
 
 bool Pet::addSpell(uint32 spell_id, ActiveStates active /*= ACT_DECIDE*/, PetSpellState state /*= PETSPELL_NEW*/, PetSpellType type /*= PETSPELL_NORMAL*/)
 {
-    if (!this)
-        return false;
     SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spell_id);
     if (!spellInfo)
     {

@@ -2,7 +2,8 @@
 SQLyog Ultimate
 MySQL - 5.7.14-log : Database - nost_logon
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -85,7 +86,7 @@ CREATE TABLE `account_banned` (
   `active` tinyint(4) NOT NULL DEFAULT '1',
   `realm` tinyint(4) NOT NULL DEFAULT '1',
   `gmlevel` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  KEY `bandate` (`bandate`,`id`)
+  PRIMARY KEY (`id`, `bandate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Ban List';
 
 /*Table structure for table `ip2nation` */

@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -322,7 +324,7 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
 
             float attackDistance = pAttacker->GetMaxChaseDistance(target);
             // Skip this unit if low priority
-            if (!allowLowPriorityTargets && (target->IsImmunedToDamage(pAttacker->GetMeleeDamageSchoolMask()) ||
+            if (!allowLowPriorityTargets && (target->IsImmuneToDamage(pAttacker->GetMeleeDamageSchoolMask()) ||
                                             target->IsSecondaryThreatTarget() ||
                                            (attackerImmobilized && !target->IsWithinDist(pAttacker, attackDistance))))
             {
@@ -344,8 +346,7 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
                 }
 
                 if (currentRef->getThreat() > 1.3f * pCurrentVictim->getThreat() ||
-                        (currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() &&
-                         pAttacker->IsWithinMeleeRange(target)))
+                        currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() && pAttacker->CanReachWithMeleeAttack(target))
                 {
                     //implement 110% threat rule for targets in melee range
                     found = true;                           //and 130% rule for targets in ranged distances

@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -6464,6 +6466,9 @@ bool ChatHandler::HandleDebugMoveCommand(char* args)
         case 3:
             target->GetMotionMaster()->MoveFleeing(m_session->GetPlayer());
             break;
+        case 4:
+            target->GetMotionMaster()->MoveFeared(m_session->GetPlayer());
+            break;
     }
     SendSysMessage("Debug Move.");
     return true;
@@ -6658,5 +6663,34 @@ bool ChatHandler::HandleSpamerList(char* args)
 {
     if (AntispamInterface *a = sAnticheatLib->GetAntispam())
         a->showMuted(GetSession());
+    return true;
+}
+
+//#UNDONE !!!
+bool ChatHandler::HandleDebugShowNearestGOInfo(char* args)
+{
+    if (WorldSession* PlayerSession = GetSession())
+    {
+        if (Player* pl = PlayerSession->GetPlayer())
+        {
+            Map* CurrentMap = pl->GetMap();
+            if (CurrentMap == nullptr) return true;
+
+            float PlayerPosX = 0.0f;
+            float PlayerPosY = 0.0f;
+            float PlayerPosZ = 0.0f;
+            pl->GetPosition(PlayerPosX, PlayerPosY, PlayerPosZ);
+
+            
+        }
+        else
+        {
+            PSendSysMessage("ERROR: Session without player!");
+        }
+    }
+
+
+    PSendSysMessage("Command must be executed in game!");
+
     return true;
 }

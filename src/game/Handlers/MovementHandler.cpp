@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -640,7 +642,7 @@ void WorldSession::HandleMoverRelocation(MovementInfo& movementInfo)
 
             if (undermap)
                 if (plMover->UndermapRecall())
-                    sLog.nostalrius("[UNDERMAP] %s [GUID %u]. MapId:%u %f %f %f", plMover->GetName(), plMover->GetGUIDLow(), plMover->GetMapId(), plMover->GetPositionX(), plMover->GetPositionY(), plMover->GetPositionZ());
+                    sLog.outInfo("[UNDERMAP] %s [GUID %u]. MapId:%u %f %f %f", plMover->GetName(), plMover->GetGUIDLow(), plMover->GetMapId(), plMover->GetPositionX(), plMover->GetPositionY(), plMover->GetPositionZ());
         }
         else if (plMover->CanFreeMove())
             plMover->SaveNoUndermapPosition(movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z + 3.0f);
@@ -668,7 +670,7 @@ void WorldSession::HandleMoverRelocation(MovementInfo& movementInfo)
             }
 
             // cancel the death timer here if started
-            sLog.nostalrius("[UNDERMAP/Teleport] Player %s teleported.", plMover->GetName(), plMover->GetGUIDLow(), plMover->GetMapId(), plMover->GetPositionX(), plMover->GetPositionY(), plMover->GetPositionZ());
+            sLog.outInfo("[UNDERMAP/Teleport] Player %s teleported.", plMover->GetName(), plMover->GetGUIDLow(), plMover->GetMapId(), plMover->GetPositionX(), plMover->GetPositionY(), plMover->GetPositionZ());
             plMover->RepopAtGraveyard();
         }
     }

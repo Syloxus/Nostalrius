@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,14 +77,14 @@ enum MoveOptions
     MOVE_STRAIGHT_PATH       = 0x100,
 };
 
-class MANGOS_DLL_SPEC MotionMaster : private std::stack<MovementGenerator *>
+class MANGOS_DLL_SPEC MotionMaster : std::stack<MovementGenerator *>
 {
-    private:
-        typedef std::stack<MovementGenerator *> Impl;
+        typedef stack<MovementGenerator *> Impl;
         typedef std::vector<MovementGenerator *> ExpireList;
+
     public:
 
-        explicit MotionMaster(Unit *unit) : m_owner(unit), m_expList(NULL), m_cleanFlag(MMCF_NONE), m_needsAsyncUpdate(false) {}
+        explicit MotionMaster(Unit *unit) : m_needsAsyncUpdate(false), m_owner(unit), m_expList(nullptr), m_cleanFlag(MMCF_NONE) {}
         ~MotionMaster();
 
         void Initialize();
@@ -93,13 +95,13 @@ class MANGOS_DLL_SPEC MotionMaster : private std::stack<MovementGenerator *>
         using Impl::top;
         using Impl::empty;
 
-        typedef Impl::container_type::const_iterator const_iterator;
-        const_iterator begin() const { return Impl::c.begin(); }
-        const_iterator end() const { return Impl::c.end(); }
-        typedef Impl::container_type::iterator iterator;
-        iterator begin() { return Impl::c.begin(); }
-        iterator end() { return Impl::c.end(); }
-        void erase(iterator it) { Impl::c.erase(it); }
+        typedef container_type::const_iterator const_iterator;
+        const_iterator begin() const { return c.begin(); }
+        const_iterator end() const { return c.end(); }
+        typedef container_type::iterator iterator;
+        iterator begin() { return c.begin(); }
+        iterator end() { return c.end(); }
+        void erase(iterator it) { c.erase(it); }
 
         void UpdateMotion(uint32 diff);
         void UpdateMotionAsync(uint32 diff);
@@ -125,7 +127,8 @@ class MANGOS_DLL_SPEC MotionMaster : private std::stack<MovementGenerator *>
         void MoveFollow(Unit* target, float dist, float angle);
         void MoveChase(Unit* target, float dist = 0.0f, float angle = 0.0f);
         void MoveConfused();
-        void MoveFleeing(Unit* enemy, uint32 timeLimit = 0);
+        void MoveFleeing(Unit* enemy, uint32 time = 0);
+        void MoveFeared(Unit* enemy, uint32 time = 0);
         void MovePoint(uint32 id, float x, float y, float z, uint32 options = MOVE_NONE, float speed = 0.0f, float finalOrientation = -10);
         void MoveSeekAssistance(float x,float y,float z);
         void MoveSeekAssistanceDistract(uint32 timer);

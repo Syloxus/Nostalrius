@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -154,7 +156,7 @@ bool UpdateData::BuildPacket(WorldPacket *packet, UpdatePacket const* updPacket,
     if (pSize > 100)                                       // compress large packets
     {
         if (pSize >= 900000)
-            sLog.nostalrius("[CRASH-CLIENT] Too large packet: %u", pSize);
+            sLog.outInfo("[CRASH-CLIENT] Too large packet: %u", pSize);
 
         uint32 destsize = compressBound(pSize);
         packet->resize(destsize + sizeof(uint32));
@@ -236,7 +238,7 @@ bool MovementData::BuildPacket(WorldPacket& packet)
     size_t pSize = _buffer.wpos();                              // use real used data size
 
     if (pSize >= 900000)
-        sLog.nostalrius("[CRASH-CLIENT] Too large packet size %u (SMSG_COMPRESSED_MOVES)", pSize);
+        sLog.outInfo("[CRASH-CLIENT] Too large packet size %u (SMSG_COMPRESSED_MOVES)", pSize);
 
     uint32 destsize = compressBound(pSize);
     packet.resize(destsize + sizeof(uint32));

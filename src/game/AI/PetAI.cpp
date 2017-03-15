@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +80,7 @@ void PetAI::_stopAttack()
     HandleReturnMovement();
 }
 
-void PetAI::UpdateAI(uint32 diff)
+void PetAI::UpdateAI(const uint32 diff)
 {
     if (!m_creature->isAlive() || !m_creature->GetCharmInfo())
         return;
@@ -130,7 +132,7 @@ void PetAI::UpdateAI(uint32 diff)
             bool attacked = false;
             if (m_creature->GetCharmInfo()->HasCommandState(COMMAND_STAY))
             {
-                if (m_creature->GetCharmInfo()->IsCommandAttack() || (m_creature->GetCharmInfo()->IsAtStay() && m_creature->IsWithinMeleeRange(m_creature->getVictim())))
+                if (m_creature->GetCharmInfo()->IsCommandAttack() || (m_creature->GetCharmInfo()->IsAtStay() && m_creature->CanReachWithMeleeAttack(m_creature->getVictim())))
                     attacked = DoMeleeAttackIfReady();
             }
             else

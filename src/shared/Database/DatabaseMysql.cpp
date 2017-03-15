@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -444,7 +446,7 @@ void MySqlPreparedStatement::bind( const SqlStmtParameters& holder )
 void MySqlPreparedStatement::addParam( int nIndex, const SqlStmtFieldData& data )
 {
     MANGOS_ASSERT(m_pInputArgs);
-    MANGOS_ASSERT(nIndex < m_nParams);
+    MANGOS_ASSERT(nIndex < static_cast <int32> (m_nParams));
 
     MYSQL_BIND& pData = m_pInputArgs[nIndex];
 

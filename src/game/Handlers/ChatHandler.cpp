@@ -1,6 +1,8 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -218,8 +220,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             {
                 if (Channel *chn = cMgr->GetChannel(channel, playerPointer, IsMaster()))
                 {
+                    // Level channels restrictions
+                    if (chn->IsLevelRestricted() && playerPointer->getLevel() < sWorld.getConfig(CONFIG_UINT32_WORLD_CHAN_MIN_LEVEL))
+                    {
+                        ChatHandler(this).SendSysMessage("You cannot use this channel yet.");
+                        return;
+                    }
+
                     // Public channels restrictions
-                    if (!(chn->GetFlags() & Channel::CHANNEL_FLAG_CUSTOM))
+                    if (!chn->HasFlag(Channel::CHANNEL_FLAG_CUSTOM))
                     {
                         // GMs should not be able to use public channels
                         if (GetSecurity() > SEC_PLAYER && !sWorld.getConfig(CONFIG_BOOL_GMS_ALLOW_PUBLIC_CHANNELS))
@@ -227,17 +236,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             ChatHandler(this).SendSysMessage("GMs can't use public channels.");
                             return;
                         }
-                        if (playerPointer->getLevel() < sWorld.getConfig(CONFIG_UINT32_WORLD_CHAN_MIN_LEVEL))
-                        {
-                            ChatHandler(this).SendSysMessage("You cannot use this channel yet.");
-                            return;
-                        }
-                    }
-
-                    // Check strict Latin for general chat channels
-                    if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
-                    {
-                        if (!chn->HasFlag(Channel::ChannelFlags::CHANNEL_FLAG_CUSTOM))
+                        // Check strict Latin for general chat channels
+                        if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
                         {
                             // remove color, punct, ctrl, space
                             if (AntispamInterface *a = sAnticheatLib->GetAntispam())

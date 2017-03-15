@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -447,9 +449,9 @@ void DungeonResetScheduler::ScheduleReset(bool add, time_t time, DungeonResetEve
 {
     MapPersistentStateManager::PersistentStateMap::iterator itr = m_InstanceSaves.m_instanceSaveByInstanceId.find(event.instanceId);
     if (itr == m_InstanceSaves.m_instanceSaveByInstanceId.end())
-        sLog.nostalrius("[DungeonReset] Instance %u [map %u]: ScheduleReset %u for unknown instance.", event.instanceId, event.mapid, event.type);
+        sLog.outInfo("[DungeonReset] Instance %u [map %u]: ScheduleReset %u for unknown instance.", event.instanceId, event.mapid, event.type);
     else if (itr->second->GetMapId() != event.mapid)
-        sLog.nostalrius("[DungeonReset] Instance %u [map %u]: ScheduleReset %u for wrong instance [map %u]", event.instanceId, event.mapid, event.type, itr->second->GetMapId());
+        sLog.outInfo("[DungeonReset] Instance %u [map %u]: ScheduleReset %u for wrong instance [map %u]", event.instanceId, event.mapid, event.type, itr->second->GetMapId());
 
     if (add)
         m_resetTimeQueue.insert(std::pair<time_t, DungeonResetEvent>(time, event));
@@ -787,7 +789,7 @@ void MapPersistentStateManager::_ResetSave(PersistentStateMap& holder, Persisten
     lock_instLists = true;
 
     if (itr->second->IsUsedByMap())
-        sLog.nostalrius("[DungeonReset] Deleting map %u instance %u used by a map !", itr->second->GetMapId(), itr->second->GetInstanceId());
+        sLog.outInfo("[DungeonReset] Deleting map %u instance %u used by a map !", itr->second->GetMapId(), itr->second->GetInstanceId());
     delete itr->second; // Destructor will unbind groups / players
     holder.erase(itr++);
     lock_instLists = false;
@@ -805,7 +807,7 @@ void MapPersistentStateManager::_ResetInstance(uint32 mapid, uint32 instanceId)
         {
             if (!iMap->IsDungeon() || iMap->GetId() != mapid)
             {
-                sLog.nostalrius("[CRASH] Instance %u linked to map %u instead of %u !", instanceId, iMap->GetId(), mapid);
+                sLog.outInfo("[CRASH] Instance %u linked to map %u instead of %u !", instanceId, iMap->GetId(), mapid);
                 return;
             }
 

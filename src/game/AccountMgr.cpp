@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,6 +107,7 @@ AccountOpResult AccountMgr::DeleteAccount(uint32 accid)
     return AOR_OK;
 }
 
+//#DEPRECATED: Not used anywhere, should we delete?
 AccountOpResult AccountMgr::ChangeUsername(uint32 accid, std::string new_uname, std::string new_passwd)
 {
     QueryResult *result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%u'", accid);
@@ -305,7 +308,7 @@ void AccountMgr::Update(uint32 diff)
     {
         _banlistUpdateTimer = sWorld.getConfig(CONFIG_BANLIST_RELOAD_TIMER) * 1000;
         LoadIPBanList(true);
-        LoadAccountBanList(true);
+        //LoadAccountBanList(true);
     }
     else
         _banlistUpdateTimer -= diff;

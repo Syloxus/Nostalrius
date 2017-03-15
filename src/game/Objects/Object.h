@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,7 +135,8 @@ enum ObjectSpawnFlags
     SPAWN_FLAG_DISABLED             = 0x02,
     SPAWN_FLAG_RANDOM_RESPAWN_TIME  = 0x04,
     SPAWN_FLAG_DYNAMIC_RESPAWN_TIME = 0x08,
-    SPAWN_FLAG_FORCE_DYNAMIC_ELITE  = 0x10,
+    SPAWN_FLAG_FORCE_DYNAMIC_ELITE  = 0x10, // creature only
+    SPAWN_FLAG_EVADE_OUT_HOME_AREA  = 0x20, // creature only
 };
 
 // [-ZERO] Need check and update
@@ -171,12 +174,16 @@ enum MovementFlags
     MOVEFLAG_HOVER              = 0x40000000,
     MOVEFLAG_INTERNAL           = 0x80000000,
 
-    // Nostalrius : ne peut etre present avec MOVEFLAG_ROOT (freez client sinon)
+    // Can not be present with MOVEFLAG_ROOT (otherwise client freeze)
     MOVEFLAG_MASK_MOVING        =
         MOVEFLAG_FORWARD | MOVEFLAG_BACKWARD | MOVEFLAG_STRAFE_LEFT | MOVEFLAG_STRAFE_RIGHT |
         MOVEFLAG_PITCH_UP | MOVEFLAG_PITCH_DOWN | MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR |
         MOVEFLAG_SPLINE_ELEVATION,
     MOVEFLAG_MASK_MOVING_OR_TURN= MOVEFLAG_MASK_MOVING | MOVEFLAG_TURN_LEFT | MOVEFLAG_TURN_RIGHT,
+
+    // MovementFlags mask that only contains flags for x/z translations
+    // this is to avoid that a jumping character that stands still triggers melee-leeway
+    MOVEFLAG_MASK_XZ = MOVEFLAG_FORWARD | MOVEFLAG_BACKWARD | MOVEFLAG_STRAFE_LEFT | MOVEFLAG_STRAFE_RIGHT
 };
 
 // used in SMSG_MONSTER_MOVE
@@ -754,7 +761,7 @@ class MANGOS_DLL_SPEC WorldObject : public Object
 
         float GetAngle( const WorldObject* obj ) const;
         float GetAngle( const float x, const float y ) const;
-        bool HasInArc( const float arcangle, const WorldObject* obj ) const;
+        bool HasInArc(const float arcangle, const WorldObject* obj, float offset = 0.0f) const;
         bool HasInArc(const float arcangle, const float x, const float y) const;
         bool isInFrontInMap(WorldObject const* target,float distance, float arc = M_PI) const;
         bool isInBackInMap(WorldObject const* target, float distance, float arc = M_PI) const;
@@ -783,10 +790,11 @@ class MANGOS_DLL_SPEC WorldObject : public Object
         uint32 GetUnitMovementFlags() const { return m_movementInfo.moveFlags; }
         void SetUnitMovementFlags(uint32 f) { m_movementInfo.moveFlags = f; }
 
-        bool IsLevitating() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_LEVITATING);}
-        bool IsFlying() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_FLYING);}
-        bool IsWalking() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_WALK_MODE);}
-        bool IsMoving() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_MASK_MOVING);}
+        bool IsLevitating() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_LEVITATING); }
+        bool IsFlying() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_FLYING); }
+        bool IsWalking() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_WALK_MODE); }
+        bool IsMoving() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_MASK_MOVING); }
+        bool IsSwimming() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING); }
 
         MovementInfo m_movementInfo;
         Transport * m_transport;

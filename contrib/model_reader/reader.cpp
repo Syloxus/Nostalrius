@@ -42,7 +42,7 @@ enum FileType
 
 int main(int argc, char **argv)
 {
-    // Lecture des arguments
+    // Reading arguments
     printf("* Model File Reader\n");
     if (argc != 2)
     {
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
         FAIL();
     OK();
 
-    // Lecture du fichier
+    // Reading the file
     // Header BUILDING
     if (type == FILE_BUILDING)
     {

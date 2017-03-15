@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +71,8 @@ SqlPreparedStatement * SqlConnection::GetStmt( int nIndex )
         //prepare statement
         if(!pStmt->prepare())
         {
-            MANGOS_ASSERT(false && "Unable to prepare SQL statement");
+            //MANGOS_ASSERT(false && "Unable to prepare SQL statement");
+            sLog.outError("Can't prepare %s, statement not executed!", fmt.c_str());
             return NULL;
         }
 
@@ -121,11 +124,14 @@ bool SqlConnection::ExecuteStmt(int nIndex, const SqlStmtParameters& id )
         return false;
 
     //get prepared statement object
-    SqlPreparedStatement * pStmt = GetStmt(nIndex);
-    //bind parameters
-    pStmt->bind(id);
-    //execute statement
-    return pStmt->execute();
+    if (SqlPreparedStatement * pStmt = GetStmt(nIndex))
+    {
+        //bind parameters
+        pStmt->bind(id);
+        //execute statement
+        return pStmt->execute();
+    }
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////

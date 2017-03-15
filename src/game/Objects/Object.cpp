@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1001,7 +1003,7 @@ void Object::RemoveShortFlag(uint16 index, bool highpart, uint16 oldFlag)
 
 bool Object::PrintIndexError(uint32 index, bool set) const
 {
-    sLog.nostalrius("%s nonexistent value field: %u (count: %u) for object typeid: %u type mask: %u",
+    sLog.outInfo("%s nonexistent value field: %u (count: %u) for object typeid: %u type mask: %u",
                     (set ? "set value to" : "get value from"), index, m_valuesCount, GetTypeId(), m_objectType);
 
     // ASSERT must fail after function call
@@ -1438,8 +1440,7 @@ bool WorldObject::HasInArc(const float arcangle, const float x, const float y) c
     return ((angle >= lborder) && (angle <= rborder));
 }
 
-// Nostalrius: 'obj' peut etre NULL.
-bool WorldObject::HasInArc(const float arcangle, const WorldObject* obj) const
+bool WorldObject::HasInArc(const float arcangle, const WorldObject* obj, float offset) const
 {
     // always have self in arc
     if (obj == this)
@@ -1451,7 +1452,7 @@ bool WorldObject::HasInArc(const float arcangle, const WorldObject* obj) const
     arc = MapManager::NormalizeOrientation(arc);
 
     float angle = GetAngle(obj);
-    angle -= m_position.o;
+    angle -= m_position.o + offset;
 
     // move angle to range -pi ... +pi
     angle = MapManager::NormalizeOrientation(angle);
@@ -2404,10 +2405,9 @@ void Object::ForceValuesUpdateAtIndex(uint16 i)
 
 void WorldObject::SetWorldMask(uint32 newMask)
 {
-    if (this)
-        worldMask = newMask;
-    // Backup - Player::SaveToDb
+    worldMask = newMask;
 }
+
 bool WorldObject::CanSeeInWorld(WorldObject const* other) const
 {
     // Les GMs voient tout

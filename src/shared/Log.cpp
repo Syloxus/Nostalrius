@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,12 +56,12 @@ LogFilterData logFilterData[LOG_FILTER_COUNT] =
 };
 
 Log::Log() :
-    logfile(NULL), gmLogfile(NULL), honorLogfile(nullptr),
-    dberLogfile(NULL), wardenLogfile(NULL), m_colored(false), m_includeTime(false), m_gmlog_per_account(false)
+    logfile(nullptr), gmLogfile(nullptr), dberLogfile(nullptr),
+    wardenLogfile(nullptr), honorLogfile(nullptr), m_colored(false), m_includeTime(false), m_gmlog_per_account(false)
 {
     for (int i = 0; i < LOG_MAX_FILES; ++i)
     {
-        logFiles[i] = NULL;
+        logFiles[i] = nullptr;
         timestampPrefix[i] = true;
     }
     Initialize();
@@ -92,6 +94,40 @@ void Log::InitColors(const std::string& str)
         m_colors[i] = Color(color[i]);
 
     m_colored = true;
+}
+
+void Log::InitSmartlogEntries(const std::string& str)
+{
+    m_smartlogExtraEntries.clear();
+
+    if (str.empty())
+        return;
+
+    uint32 entry;
+    std::istringstream ss(str);
+
+    while (ss)
+    {
+        ss >> entry;
+        m_smartlogExtraEntries.push_back(entry);        
+    }
+}
+
+void Log::InitSmartlogGuids(const std::string& str)
+{
+    m_smartlogExtraGuids.clear();
+
+    if (str.empty())
+        return;
+
+    uint32 entry;
+    std::istringstream ss(str);
+
+    while (ss)
+    {
+        ss >> entry;
+        m_smartlogExtraGuids.push_back(entry);
+    }
 }
 
 void Log::SetColor(bool stdout_stream, Color color)
@@ -256,7 +292,7 @@ void Log::Initialize()
         }
     }
 
-    dberLogfile             = openLogFile("DBErrorLogFile", NULL, "a");
+    dberLogfile             = openLogFile("DBErrorLogFile", nullptr, "a");
     worldLogfile            = openLogFile("WorldLogFile", "WorldLogTimestamp", "a");
     nostalriusLogFile       = openLogFile("NostalriusLogFile", "NostalriusLogTimestamp", "a");
     honorLogfile            = openLogFile("HonorLogFile", "HonorLogTimestamp", "a");
@@ -264,17 +300,17 @@ void Log::Initialize()
     logFiles[LOG_CHAT]      = openLogFile("ChatLogFile", "ChatLogTimestamp", "a");
     logFiles[LOG_BG]        = openLogFile("BgLogFile", "BgLogTimestamp", "a");
     logFiles[LOG_CHAR]      = openLogFile("CharLogFile", "CharLogTimestamp", "a");
-    logFiles[LOG_RA]        = openLogFile("RaLogFile", NULL, "a");
-    logFiles[LOG_DBERRFIX]  = openLogFile("DBErrorFixFile", NULL, "w+");
-    logFiles[LOG_CLIENT_IDS]= openLogFile("ClientIdsLogFile", NULL, "a");
-    logFiles[LOG_LOOTS]     = openLogFile("LootsLogFile", NULL, "a");
-    logFiles[LOG_LEVELUP]   = openLogFile("LevelupLogFile", NULL, "a");
-    logFiles[LOG_PERFORMANCE]   = openLogFile("PerformanceLog.File", NULL, "a");
-    logFiles[LOG_MONEY_TRADES]  = openLogFile("LogMoneyTrades", NULL, "a");
-    logFiles[LOG_ANTICHEAT]     = openLogFile("AnticheatLogFile", NULL, "a");
-    logFiles[LOG_GM_CRITICAL]   = openLogFile("CriticalCommandsLogFile", NULL, "a");
-    logFiles[LOG_CHAT_SPAM]     = openLogFile("ChatSpamLogFile", NULL, "a");
-    logFiles[LOG_EXPLOITS]      = openLogFile("ExploitsLogFile", NULL, "a");
+    logFiles[LOG_RA]        = openLogFile("RaLogFile", nullptr, "a");
+    logFiles[LOG_DBERRFIX]  = openLogFile("DBErrorFixFile", nullptr, "w+");
+    logFiles[LOG_CLIENT_IDS]= openLogFile("ClientIdsLogFile", nullptr, "a");
+    logFiles[LOG_LOOTS]     = openLogFile("LootsLogFile", nullptr, "a");
+    logFiles[LOG_LEVELUP]   = openLogFile("LevelupLogFile", nullptr, "a");
+    logFiles[LOG_PERFORMANCE]   = openLogFile("PerformanceLog.File", nullptr, "a");
+    logFiles[LOG_MONEY_TRADES]  = openLogFile("LogMoneyTrades", nullptr, "a");
+    logFiles[LOG_ANTICHEAT]     = openLogFile("AnticheatLogFile", nullptr, "a");
+    logFiles[LOG_GM_CRITICAL]   = openLogFile("CriticalCommandsLogFile", nullptr, "a");
+    logFiles[LOG_CHAT_SPAM]     = openLogFile("ChatSpamLogFile", nullptr, "a");
+    logFiles[LOG_EXPLOITS]      = openLogFile("ExploitsLogFile", nullptr, "a");
 
     timestampPrefix[LOG_DBERRFIX] = false;
 
@@ -283,6 +319,10 @@ void Log::Initialize()
     m_logLevel     = LogLevel(sConfig.GetIntDefault("LogLevel", 0));
     m_logFileLevel = LogLevel(sConfig.GetIntDefault("LogFileLevel", 0));
     InitColors(sConfig.GetStringDefault("LogColors", ""));
+
+    // Smartlog data
+    InitSmartlogEntries(sConfig.GetStringDefault("Smartlog.ExtraEntries", ""));
+    InitSmartlogGuids(sConfig.GetStringDefault("Smartlog.ExtraGuids", ""));
 
     m_logFilter = 0;
     for(int i = 0; i < LOG_FILTER_COUNT; ++i)
@@ -298,7 +338,7 @@ FILE* Log::openLogFile(char const* configFileName,char const* configTimeStampFla
 {
     std::string logfn=sConfig.GetStringDefault(configFileName, "");
     if (logfn.empty())
-        return NULL;
+        return nullptr;
 
     if (configTimeStampFlag && sConfig.GetBoolDefault(configTimeStampFlag,false))
     {
@@ -315,7 +355,7 @@ FILE* Log::openLogFile(char const* configFileName,char const* configTimeStampFla
 FILE* Log::openGmlogPerAccount(uint32 account)
 {
     if (m_gmlog_filename_format.empty())
-        return NULL;
+        return nullptr;
 
     char namebuf[MANGOS_PATH_MAX];
     snprintf(namebuf,MANGOS_PATH_MAX,m_gmlog_filename_format.c_str(),account);
@@ -324,7 +364,7 @@ FILE* Log::openGmlogPerAccount(uint32 account)
 
 void Log::outTimestamp(FILE* file)
 {
-    time_t t = time(NULL);
+    time_t t = time(nullptr);
     tm* aTm = localtime(&t);
     //       YYYY   year
     //       MM     month (2 digits 01-12)
@@ -337,7 +377,7 @@ void Log::outTimestamp(FILE* file)
 
 void Log::outTime(FILE* where)
 {
-    time_t t = time(NULL);
+    time_t t = time(nullptr);
     tm* aTm = localtime(&t);
     //       YYYY   year
     //       MM     month (2 digits 01-12)
@@ -350,7 +390,7 @@ void Log::outTime(FILE* where)
 
 std::string Log::GetTimestampStr()
 {
-    time_t t = time(NULL);
+    time_t t = time(nullptr);
     tm* aTm = localtime(&t);
     //       YYYY   year
     //       MM     month (2 digits 01-12)
@@ -415,7 +455,7 @@ void Log::outString( const char * str, ... )
     fflush(stdout);
 }
 
-void Log::nostalrius( const char * str, ...)
+void Log::outInfo( const char * str, ...)
 {
     if (!str)
         return;
@@ -836,14 +876,14 @@ void Log::outCommand( uint32 account, const char * str, ... )
     fflush(stdout);
 }
 
-void Log::outWorldPacketDump( uint32 socket, uint32 opcode, char const* opcodeName, ByteBuffer const* packet, bool incoming )
+void Log::outWorldPacketDump( uint64 socket, uint32 opcode, char const* opcodeName, ByteBuffer const* packet, bool incoming )
 {
     if (!worldLogfile)
         return;
 
     outTimestamp(worldLogfile);
 
-    fprintf(worldLogfile,"\n%s:\nSOCKET: %u\nLENGTH: %u\nOPCODE: %s (0x%.4X)\nDATA:\n",
+    fprintf(worldLogfile,"\n%s:\nSOCKET: %llu\nLENGTH: %zu\nOPCODE: %s (0x%.4X)\nDATA:\n",
         incoming ? "CLIENT" : "SERVER",
         socket, packet->size(), opcodeName, opcode);
 

@@ -1,8 +1,9 @@
 /*
 SQLyog Ultimate
-MySQL - 5.7.14-log : Database - nost_world
+MySQL - 5.7.14-log : Database - world
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -11,6 +12,40 @@ MySQL - 5.7.14-log : Database - nost_world
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*Table structure for table `area_template` */
+
+DROP TABLE IF EXISTS `area_template`;
+
+CREATE TABLE `area_template` (
+  `Entry` mediumint(8) NOT NULL DEFAULT '0',
+  `MapId` mediumint(8) NOT NULL DEFAULT '0',
+  `ZoneId` mediumint(8) NOT NULL DEFAULT '0',
+  `ExploreFlag` mediumint(8) NOT NULL DEFAULT '0',
+  `Flags` mediumint(8) NOT NULL DEFAULT '0',
+  `AreaLevel` mediumint(8) NOT NULL DEFAULT '0',
+  `Name` varchar(100) NOT NULL DEFAULT '',
+  `Team` tinyint(3) NOT NULL DEFAULT '0',
+  `LiquidTypeId` tinyint(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Entry`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Table structure for table `areatrigger_bg_entrance` */
+
+DROP TABLE IF EXISTS `areatrigger_bg_entrance`;
+
+CREATE TABLE `areatrigger_bg_entrance` (
+  `id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'Identifier',
+  `name` text,
+  `team` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `bg_template` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `exit_map` float NOT NULL DEFAULT '0',
+  `exit_position_x` float NOT NULL DEFAULT '0',
+  `exit_position_y` float NOT NULL DEFAULT '0',
+  `exit_position_z` float NOT NULL DEFAULT '0',
+  `exit_orientation` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 /*Table structure for table `areatrigger_involvedrelation` */
 
 DROP TABLE IF EXISTS `areatrigger_involvedrelation`;
@@ -545,7 +580,8 @@ CREATE TABLE `creature_template` (
   `equipment_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `trainer_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `vendor_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `mechanic_immune_mask` int(10) unsigned NOT NULL DEFAULT '0',
+  `MechanicImmuneMask` int(10) unsigned NOT NULL DEFAULT '0',
+  `SchoolImmuneMask` int(10) unsigned NOT NULL DEFAULT '0',
   `flags_extra` int(10) unsigned NOT NULL DEFAULT '0',
   `ScriptName` char(64) NOT NULL DEFAULT '',
   PRIMARY KEY (`entry`)
@@ -1254,6 +1290,23 @@ CREATE TABLE `item_template` (
   KEY `items_index` (`class`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Item System';
 
+/*Table structure for table `locales_area` */
+
+DROP TABLE IF EXISTS `locales_area`;
+
+CREATE TABLE `locales_area` (
+  `Entry` mediumint(8) NOT NULL DEFAULT '0',
+  `NameLoc1` varchar(100) NOT NULL DEFAULT '',
+  `NameLoc2` varchar(100) NOT NULL DEFAULT '',
+  `NameLoc3` varchar(100) NOT NULL DEFAULT '',
+  `NameLoc4` varchar(100) NOT NULL DEFAULT '',
+  `NameLoc5` varchar(100) NOT NULL DEFAULT '',
+  `NameLoc6` varchar(100) NOT NULL DEFAULT '',
+  `NameLoc7` varchar(100) NOT NULL DEFAULT '',
+  `NameLoc8` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`Entry`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 /*Table structure for table `locales_creature` */
 
 DROP TABLE IF EXISTS `locales_creature`;
@@ -1655,21 +1708,21 @@ CREATE TABLE `map_loot_disabled` (
 DROP TABLE IF EXISTS `map_template`;
 
 CREATE TABLE `map_template` (
-  `Entry` SMALLINT(5) UNSIGNED NOT NULL,
-  `Parent` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `MapType` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `LinkedZone` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `LevelMin` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `LevelMax` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `MaxPlayers` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `ResetDelay` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `GhostEntranceMap` SMALLINT(5) NOT NULL DEFAULT '-1',
-  `GhostEntranceX` FLOAT NOT NULL DEFAULT '0',
-  `GhostEntranceY` FLOAT NOT NULL DEFAULT '0',
-  `MapName` VARCHAR(128) NOT NULL DEFAULT '',
-  `ScriptName` VARCHAR(128) NOT NULL DEFAULT '',
+  `Entry` smallint(5) unsigned NOT NULL,
+  `Parent` int(10) unsigned NOT NULL DEFAULT '0',
+  `MapType` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `LinkedZone` int(10) unsigned NOT NULL DEFAULT '0',
+  `LevelMin` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `LevelMax` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `MaxPlayers` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `ResetDelay` int(10) unsigned NOT NULL DEFAULT '0',
+  `GhostEntranceMap` smallint(5) NOT NULL DEFAULT '-1',
+  `GhostEntranceX` float NOT NULL DEFAULT '0',
+  `GhostEntranceY` float NOT NULL DEFAULT '0',
+  `MapName` varchar(128) NOT NULL DEFAULT '',
+  `ScriptName` varchar(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`Entry`)
-) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Table structure for table `migrations` */
 
@@ -1888,7 +1941,7 @@ CREATE TABLE `pet_name_generation` (
   `entry` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `half` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=261 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Table structure for table `petcreateinfo_spell` */
 
@@ -2076,62 +2129,6 @@ CREATE TABLE `playercreateinfo_spell` (
   PRIMARY KEY (`race`,`class`,`Spell`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-/*Table structure for table `playerlowstart_spell` */
-
-DROP TABLE IF EXISTS `playerlowstart_spell`;
-
-CREATE TABLE `playerlowstart_spell` (
-  `class` int(11) DEFAULT '0',
-  `spell` int(11) DEFAULT '0',
-  `race` int(11) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Table structure for table `playerstart_equip` */
-
-DROP TABLE IF EXISTS `playerstart_equip`;
-
-CREATE TABLE `playerstart_equip` (
-  `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `item` int(10) unsigned NOT NULL DEFAULT '0',
-  `slot` tinyint(3) unsigned NOT NULL DEFAULT '21',
-  PRIMARY KEY (`class`,`item`,`slot`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Robot up : stuff';
-
-/*Table structure for table `playerstart_equip2` */
-
-DROP TABLE IF EXISTS `playerstart_equip2`;
-
-CREATE TABLE `playerstart_equip2` (
-  `entry` mediumint(8) NOT NULL DEFAULT '0',
-  `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `item` int(10) unsigned NOT NULL DEFAULT '0',
-  `itemAmount` mediumint(8) NOT NULL DEFAULT '1',
-  `slot` tinyint(3) unsigned NOT NULL DEFAULT '21',
-  PRIMARY KEY (`entry`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Robot up : stuff';
-
-/*Table structure for table `playerstart_equip3` */
-
-DROP TABLE IF EXISTS `playerstart_equip3`;
-
-CREATE TABLE `playerstart_equip3` (
-  `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `item` int(10) unsigned NOT NULL DEFAULT '0',
-  `slot` tinyint(3) unsigned NOT NULL DEFAULT '21',
-  PRIMARY KEY (`class`,`item`,`slot`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Robot up : stuff';
-
-/*Table structure for table `playerstart_spell` */
-
-DROP TABLE IF EXISTS `playerstart_spell`;
-
-CREATE TABLE `playerstart_spell` (
-  `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `spell` int(10) unsigned NOT NULL DEFAULT '0',
-  `race` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`class`,`spell`,`race`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Robot up : sorts';
-
 /*Table structure for table `points_of_interest` */
 
 DROP TABLE IF EXISTS `points_of_interest`;
@@ -2226,6 +2223,7 @@ CREATE TABLE `pool_template` (
   `max_limit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Max number of objects (0) is no limit',
   `description` varchar(255) NOT NULL,
   `flags` int(11) unsigned NOT NULL DEFAULT '0',
+  `instance` mediumint(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`entry`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -2663,7 +2661,8 @@ CREATE TABLE `spell_check` (
 DROP TABLE IF EXISTS `spell_disabled`;
 
 CREATE TABLE `spell_disabled` (
-  `entry` int(10) unsigned NOT NULL COMMENT 'Disabled spell'
+  `entry` int(10) unsigned NOT NULL COMMENT 'Disabled spell',
+  PRIMARY KEY (`entry`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 /*Table structure for table `spell_effect_mod` */
@@ -2689,7 +2688,7 @@ CREATE TABLE `spell_effect_mod` (
   `EffectRadiusIndex` int(10) NOT NULL DEFAULT '-1',
   `EffectApplyAuraName` int(10) NOT NULL DEFAULT '-1',
   `EffectItemType` int(10) NOT NULL DEFAULT '-1',
-  `EffectMiscValue` int(10) NOT NULL DEFAULT '0',
+  `EffectMiscValue` int(10) NOT NULL DEFAULT '-1',
   `EffectTriggerSpell` int(10) NOT NULL DEFAULT '-1',
   `Comment` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`Id`,`EffectIndex`)
@@ -2878,7 +2877,7 @@ CREATE TABLE `spell_target_position` (
   `target_position_y` float NOT NULL DEFAULT '0',
   `target_position_z` float NOT NULL DEFAULT '0',
   `target_orientation` float NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`,`target_map`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Spell System';
 
 /*Table structure for table `spell_threat` */

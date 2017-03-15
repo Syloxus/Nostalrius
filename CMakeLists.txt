@@ -31,6 +31,12 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_SOURCE_DIR}/cmake
 )
 
+# Added by Giperion, in WIN32 output all compiled files in one directory
+if (WIN32)
+	set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin )
+	set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
+endif()
+
 # Force out-of-source build
 string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" BUILDING_IN_SOURCE)
 if(BUILDING_IN_SOURCE)
@@ -83,6 +89,60 @@ option(USE_STD_MALLOC "Use standard malloc instead of TBB" 0)
 option(TBB_DEBUG "Use TBB debug librairies" 0)
 option(USE_ANTICHEAT "Use anticheat" 0)
 option(SCRIPTS "Compile scripts" 1)
+# Force out-of-source build
+string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" BUILDING_IN_SOURCE)
+if(BUILDING_IN_SOURCE)
+  message(FATAL_ERRO
+    "This project requires an out of source build. Remove the file 'CMakeCache.txt' found in this directory before continuing, create a separate build directory and run 'cmake <srcs> [options]' from there."
+  )
+endif()
+
+if(WIN32)
+  if(NOT MSVC)
+    message(FATAL_ERROR "Under Windows other compiler than Microsoft Visual Studio are not supported.")
+  elseif(MSVC_VERSION LESS 1900)
+    message(FATAL_ERROR "Only Visual Studio 2015 or newer is supported")
+  endif()
+endif()
+
+find_package(Platform REQUIRED)
+find_package(Git)
+
+# Output description of this script
+message(STATUS
+  "\nThis script builds the MaNGOS server.
+  Options that can be used in order to configure the process:
+    PREFIX: Path where the server should be installed to
+    PCH: Use precompiled headers
+    DEBUG: Debug mode
+  To set an option simply type -D<OPTION>=<VALUE> after 'cmake <srcs>'.
+  For example: cmake .. -DDEBUG=1 -DPREFIX=/opt/mangos\n"
+) # TODO: PLATFORM: Sets the architecture for compile (X86,X64)
+
+# Override configuration-types - we don't use anything else than debug and release
+if(CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_CONFIGURATION_TYPES Release Debug)
+  set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING
+    "Reset the configurations to what we need"
+    FORCE)
+endif()
+
+# Find out what system we use to include the needed libs
+if(WIN32)
+  if(PLATFORM MATCHES X86) # 32-bit
+    set(DEP_ARCH win32)
+  else() # 64-bit
+    set(DEP_ARCH x64)
+  endif()
+endif()
+
+option(DEBUG "Debug mode" 0)
+option(USE_STD_MALLOC "Use standard malloc instead of TBB" 0)
+option(TBB_DEBUG "Use TBB debug librairies" 0)
+option(USE_ANTICHEAT "Use anticheat" 0)
+option(SCRIPTS "Compile scripts" 1)
+option(USE_EXTRACTORS "Compile extractors" 0)
+option(USE_UTILITY "Compile additional utility's" 0)
 
 find_package(PCHSupport)
 
@@ -152,7 +212,7 @@ if(NOT USE_STD_MALLOC)
   find_package(TBB COMPONENTS tbbmalloc)
   if(NOT TBB_FOUND)
     message(FATAL_ERROR
-      "This project requires TBB installed. Please download the TBB Stable Release from http://www.threadingbuildingblocks.org/ and install it. If this script didn't find TBB and it was correctly installed please set TBB_ROOT to the correct path."
+      "This project requires TBB installed. Please download the TBB Stable Release from http://www.threadingbuildingblocks.org/ and install it. If this script didn't find TBB and it was correctly installed please set TBB_ROOT_DIR to the correct path."
     )
   endif()
   
@@ -165,6 +225,13 @@ if(NOT USE_STD_MALLOC)
       ${TBB_LIBRARIES}
     )
   endif()
+  
+  if (WIN32)
+	list (GET TBB_LIBRARIES 1 TBB_SINGLE_FILEDIRECTORY)
+	get_filename_component(TBB_LIB_DIRECTORY "${TBB_SINGLE_FILEDIRECTORY}" DIRECTORY)
+	link_directories(${TBB_LIB_DIRECTORY})
+  endif()
+  
 endif()
 
 # Win32 delifered packages
@@ -402,7 +469,12 @@ if(XCODE)
   endif()
 endif()
 
-add_subdirectory(dep) # TODO: add vmap extractor build support
+add_subdirectory(dep)
+
+#TODO: need fully implementation
+if (USE_EXTRACTORS)
+	add_subdirectory(contrib/mmap)
+endif()
 
 # Add definitions for all build types
 # Don't place this above 'dep' subdirectory! Because of defines build will crash.

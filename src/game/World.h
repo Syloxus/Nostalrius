@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,6 +102,8 @@ enum eConfigUInt32Values
     CONFIG_UINT32_PACKET_BCAST_FREQUENCY,
     CONFIG_UINT32_MAILSPAM_EXPIRE_SECS,
     CONFIG_UINT32_MAILSPAM_MAX_MAILS,
+    CONFIG_UINT32_MAILSPAM_LEVEL,
+    CONFIG_UINT32_MAILSPAM_MONEY,
     CONFIG_UINT32_EMPTY_MAPS_UPDATE_TIME,
     CONFIG_UINT32_COD_FORCE_TAG_MAX_LEVEL,
     CONFIG_UINT32_PUB_CHANS_MUTE_VANISH_LEVEL,
@@ -249,7 +253,23 @@ enum eConfigUInt32Values
     CONFIG_UINT32_CHARDELETE_MIN_LEVEL,
     CONFIG_UINT32_GUID_RESERVE_SIZE_CREATURE,
     CONFIG_UINT32_GUID_RESERVE_SIZE_GAMEOBJECT,
-    CONFIG_UINT32_VALUE_COUNT,
+    CONFIG_UINT32_LONGCOMBAT,
+    CONFIG_UINT32_VALUE_COUNT
+};
+
+enum WowPatch
+{
+    WOW_PATCH_102  = 0,
+    WOW_PATCH_103  = 1,
+    WOW_PATCH_104  = 2,
+    WOW_PATCH_105  = 3,
+    WOW_PATCH_106  = 4,
+    WOW_PATCH_107  = 5,
+    WOW_PATCH_108  = 6,
+    WOW_PATCH_109  = 7,
+    WOW_PATCH_110  = 8,
+    WOW_PATCH_111  = 9,
+    WOW_PATCH_112  = 10
 };
 
 enum
@@ -369,6 +389,9 @@ enum eConfigBoolValues
     CONFIG_BOOL_LOGSDB_CHARACTERS,
     CONFIG_BOOL_LOGSDB_TRANSACTIONS,
     CONFIG_BOOL_LOGSDB_BATTLEGROUNDS,
+    CONFIG_BOOL_SMARTLOG_DEATH,
+    CONFIG_BOOL_SMARTLOG_LONGCOMBAT,
+    CONFIG_BOOL_SMARTLOG_SCRIPTINFO,
     CONFIG_BOOL_TERRAIN_PRELOAD_CONTINENTS,
     CONFIG_BOOL_TERRAIN_PRELOAD_INSTANCES,
     CONFIG_BOOL_CLEANUP_TERRAIN,
@@ -423,6 +446,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_ENABLE_VD,
     CONFIG_BOOL_ENABLE_MOVEMENT_INTERP,
     CONFIG_BOOL_WHISPER_RESTRICTION,
+    CONFIG_BOOL_MAILSPAM_ITEM,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -588,6 +612,9 @@ class World
         void SetMotd(const std::string& motd) { m_motd = motd; }
         /// Get the current Message of the Day
         const char* GetMotd() const { return m_motd.c_str(); }
+
+        // Get current server's WoW Patch
+        uint8 GetWowPatch() const { return m_wowPatch; }
 
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
 
@@ -793,6 +820,7 @@ class World
         int32 m_configNostalrius[CONFIG_NOSTALRIUS_MAX];
 
         int32 m_playerLimit;
+        uint8 m_wowPatch;
 
         LocaleConstant m_defaultDbcLocale;                     // from config for one from loaded DBC locales
         uint32 m_availableDbcLocaleMask;                       // by loaded DBC

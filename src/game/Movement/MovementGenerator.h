@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,28 +107,28 @@ class MANGOS_DLL_SPEC MovementGeneratorMedium : public MovementGenerator
             //u->AssertIsType<T>();
             return (static_cast<D*>(this))->GetResetPosition(*((T*)&u), x, y, z);
         }
-    public:
+
         // will not link if not overridden in the generators
         void Initialize(T &u);
         void Finalize(T &u);
         void Interrupt(T &u);
         void Reset(T &u);
         bool Update(T &u, const uint32 &time_diff);
-        void UpdateAsync(T &u, uint32 time_diff) {}
+        void UpdateAsync(T &/*u*/, uint32 /*time_diff*/) {}
 
         // not need always overwrites
         bool GetResetPosition(T& /*u*/, float& /*x*/, float& /*y*/, float& /*z*/) { return false; }
 };
 
-struct SelectableMovement : public FactoryHolder<MovementGenerator,MovementGeneratorType>
+struct SelectableMovement : FactoryHolder<MovementGenerator,MovementGeneratorType>
 {
-    SelectableMovement(MovementGeneratorType mgt) : FactoryHolder<MovementGenerator,MovementGeneratorType>(mgt) {}
+    explicit SelectableMovement(MovementGeneratorType mgt) : FactoryHolder<MovementGenerator,MovementGeneratorType>(mgt) {}
 };
 
 template<class REAL_MOVEMENT>
-struct MovementGeneratorFactory : public SelectableMovement
+struct MovementGeneratorFactory : SelectableMovement
 {
-    MovementGeneratorFactory(MovementGeneratorType mgt) : SelectableMovement(mgt) {}
+    explicit MovementGeneratorFactory(MovementGeneratorType mgt) : SelectableMovement(mgt) {}
 
     MovementGenerator* Create(void *) const;
 };

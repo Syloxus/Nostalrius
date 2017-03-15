@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
+ * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
+ * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,9 +197,9 @@ extern int main(int argc, char **argv)
 #define XSTR(s) STR(s)
 
     //sLog.nostalrius("Starting worldserver CORE: %s SCRIPTS: %s " __DATE__ " " __TIME__ , XSTR(CORE_VERSION), XSTR(SCRIPT_VERSION));
-    sLog.nostalrius("Build params : \"" MANGOS_BUILD_OPTIONS "\"");
-    sLog.nostalrius("Alloc library: " MANGOS_ALLOC_LIB "");
-    sLog.nostalrius("Core Revision: " _FULLVERSION);
+    sLog.outInfo("Build params : \"" MANGOS_BUILD_OPTIONS "\"");
+    sLog.outInfo("Alloc library: " MANGOS_ALLOC_LIB "");
+    sLog.outInfo("Core Revision: " _FULLVERSION);
 
     DETAIL_LOG("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
     if (SSLeay() < 0x009080bfL )
