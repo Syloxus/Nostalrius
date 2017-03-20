@@ -236,6 +236,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             ChatHandler(this).SendSysMessage("GMs can't use public channels.");
                             return;
                         }
+
                         // Check strict Latin for general chat channels
                         if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
                         {
@@ -256,7 +257,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         }
                     }
 
-                    chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
+                    chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), channel.c_str(), lang);
 
                     if (lang != LANG_ADDON && chn->HasFlag(Channel::ChannelFlags::CHANNEL_FLAG_GENERAL))
                         if (AntispamInterface *a = sAnticheatLib->GetAntispam())
