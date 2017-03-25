@@ -46,6 +46,9 @@ set (SCRIPTS_SRCS
 	custom/npc_escort.cpp
 	custom/npc_gobj_spawner.cpp
 	custom/zero_creatures.cpp
+	custom/npc_welcome.cpp
+	custom/PlayerStartMgr.cpp
+	custom/PlayerStartMgr.h
 	eastern_kingdoms/alterac_mountains/alterac_mountains.cpp
 	eastern_kingdoms/arathi_highlands/arathi_highlands.cpp
 	eastern_kingdoms/blasted_lands/blasted_lands.cpp

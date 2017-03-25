@@ -268,12 +268,14 @@ void AddSC_thousand_needles();
 void AddSC_thunder_bluff();
 void AddSC_ungoro_crater();
 void AddSC_winterspring();
+void AddSC_npc_welcome();
 
 void AddScripts()
 {
     //Nostalrius
     AddSC_generic_spell_ai();
     AddSC_npc_escort();
+    AddSC_npc_welcome();
 
     //battlegrounds
     AddSC_battleground();
