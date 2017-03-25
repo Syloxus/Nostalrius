@@ -651,8 +651,8 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                 }
                 else if (target == this && (index == PLAYER_TRACK_CREATURES || index == PLAYER_TRACK_RESOURCES))
                 {
-                    //if (WardenInterface* base = target->GetSession()->GetWarden())
-                        //base->TrackingUpdateSent(index, m_uint32Values[index]);
+                    if (WardenInterface* base = target->GetSession()->GetWarden())
+                        base->TrackingUpdateSent(index, m_uint32Values[index]);
                     *data << m_uint32Values[index];
                 }
                 else
