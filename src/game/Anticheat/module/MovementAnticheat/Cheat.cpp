@@ -15,7 +15,7 @@
 
 namespace Movement
 {
-extern float computeFallElevation(float time, bool safeFall, float initialSpeed);
+    extern float computeFallElevation(float time, bool safeFall, float initialSpeed);
 }
 
 const char* GetCheatTypeNameFromFlag(CheatType flagId)
@@ -944,6 +944,10 @@ bool PlayerCheatData::IsTeleportAllowed(MovementInfo const& movementInfo, float&
 
         // Undercity Lift
         if (me->GetZoneId() == 1497 && me->GetAreaId() == 1497)
+            return true;
+
+        // Thunderbluff Lifts
+        if (me->GetZoneId() == 1638 && me->GetAreaId() == 1638)
             return true;
     }
 
