@@ -157,6 +157,7 @@ class PlayerCheatData: public PlayerAnticheatInterface
 
         bool IsTeleportAllowed(MovementInfo const& movementInfo, float& distance);
         bool CheckTeleport(uint32 opcode, MovementInfo& movementInfo);
+        bool IsWallClimb(MovementInfo const& movementInfo);
 
         uint32 _storeCheatFlags;
 
@@ -171,6 +172,8 @@ class PlayerCheatData: public PlayerAnticheatInterface
         // Logs
         float _maxOverspeedDistance;
         uint32 _maxClientDesynchro;
+        float m_MoveDist;
+        float m_DeltaZ;
 };
 
 #endif

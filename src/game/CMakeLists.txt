@@ -410,9 +410,7 @@ set (game_SRCS
 	vmap/VMapManager2.h
 	vmap/VMapTools.h
 	vmap/WorldModel.h
-
 )
-
 
 if(WIN32)
   #allow exceptions in destructors

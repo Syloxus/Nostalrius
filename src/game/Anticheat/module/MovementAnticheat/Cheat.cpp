@@ -360,6 +360,9 @@ bool PlayerCheatData::HandleAnticheatTests(MovementInfo& movementInfo, WorldSess
             _jumpcount = 0;
     }
 
+    if (sCheatsMgr->EnableAntiMultiJumpHack())
+        IsWallClimb(movementInfo);
+
     if (opcode == MSG_MOVE_STOP_SWIM && (movementInfo.moveFlags & MOVEFLAG_SWIMMING))
         APPEND_CHEAT(CHEAT_TYPE_FLY_HACK_SWIM);
 
@@ -538,7 +541,6 @@ void PlayerCheatData::InitSpeeds(Unit* unit)
     for (int i = 0; i < MAX_MOVE_TYPE; ++i)
         _clientSpeeds[i] = unit->GetSpeed(UnitMoveType(i));
 }
-
 
 void PlayerCheatData::Unreachable(Unit* attacker)
 {
@@ -958,6 +960,61 @@ bool PlayerCheatData::IsTeleportAllowed(MovementInfo const& movementInfo, float&
 
     if (distance < 40.0f)
         return true;
+
+    return false;
+}
+
+bool PlayerCheatData::IsWallClimb(MovementInfo const& movementInfo)
+{
+    if (me->GetTransport() || me->IsFlying() || me->IsFalling() || me->IsSwimming())
+        return false;
+
+    float dist[2];
+    float deltaZ[2];
+    float floor_z[2];
+    float angle[2];
+
+    float deltaX = me->GetPositionX() - movementInfo.pos.x;
+    float deltaY = me->GetPositionY() - movementInfo.pos.y;
+    m_MoveDist = sqrt((deltaX * deltaX) + (deltaY * deltaY)); // Traveled distance
+
+    dist[0] = m_MoveDist;
+
+    float Size = me->GetObjectBoundingRadius();
+    dist[1] = Size * 2;
+
+    float x = me->GetPositionX();
+    float y = me->GetPositionY();
+    float z = me->GetPositionZ();
+    float o = me->GetOrientation();
+
+    Map* pMap = me->GetMap();
+
+    if (!pMap)
+        return false;
+
+    // Forward
+    float fx = x + cosf(o) * 1;
+    float fy = y + sinf(o) * 1;
+    floor_z[0] = pMap->GetHeight(fx, fy, z);
+
+    // Backward
+    float bx = x + cosf(o)*-1;
+    float by = y + sinf(o)*-1;
+    floor_z[1] = pMap->GetHeight(bx, by, z);
+
+    deltaZ[0] = m_DeltaZ;
+    deltaZ[1] = fabs(floor_z[0] - floor_z[1]);
+
+    for (uint8 i = 0; i < 2; i++)
+        angle[i] = MapManager::NormalizeOrientation(tan(deltaZ[i] / dist[i]));
+
+    if (angle[0] > 1.9f && angle[1] > 1.9f)
+    {
+        AddCheats(1 << CHEAT_TYPE_WALL_CLIMB);
+        sLog.outWarden("SERVER WARDEN (MovementFlags hack): player %s is using a wall climb hack", me->GetSession()->GetPlayerName());
+        return true;
+    }
 
     return false;
 }

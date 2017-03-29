@@ -138,10 +138,10 @@ public:
 };
 
 
-class AnticheatDefaultLib: public AnticheatLibInterface
+class AnticheatDefaultLib : public AnticheatLibInterface
 {
-};
 
+};
 
 AnticheatLibInterface* GetAnticheatLib();
 
