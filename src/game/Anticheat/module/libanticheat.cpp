@@ -140,7 +140,7 @@ void AnticheatConfig::setConfig(AnticheatConfigBoolValues index, char const* fie
     setConfig(index, sAcConfig.GetBoolDefault(fieldname, defvalue));
 }
 
-/*AnticheatLibInterface* GetAnticheatLib()
+AnticheatLibInterface* GetAnticheatLib()
 {
     return NostalriusAnticheatLib::instance();
-}*/
+}

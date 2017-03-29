@@ -66,7 +66,6 @@ set (game_SRCS
 	AI/ScriptedInstance.cpp
 	AI/ScriptedPetAI.cpp
 	AI/TotemAI.cpp
-	Anticheat/Anticheat.cpp
 	AuctionHouse/AuctionHouseBotMgr.cpp
 	AuctionHouse/AuctionHouseMgr.cpp
 	AutoTesting/AutoTestingMgr.cpp
@@ -431,7 +430,6 @@ else()
   )
 endif()
 
-
 list(APPEND game_SRCS
     Anticheat/module/libanticheat.cpp
     Anticheat/module/libanticheat.h
@@ -451,7 +449,6 @@ list(APPEND game_SRCS
     Anticheat/module/WardenAnticheat/WardenModuleWin.h
     Anticheat/module/WardenAnticheat/WardenKeyGeneration.h
 )
-
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
