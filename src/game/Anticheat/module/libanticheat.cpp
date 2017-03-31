@@ -121,6 +121,7 @@ void AnticheatConfig::loadConfigSettings()
     setConfig(CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_TIME, "Antispam.FrequencyTime", 3);
     setConfig(CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_COUNT, "Antispam.FrequencyCount", 3);
 
+    setConfig(CONFIG_BOOL_WARDEN_ENABLE, "Warden.Enable", true);
     setConfig(CONFIG_UINT32_AC_WARDEN_MEM_CHECKS_COUNT, "Warden.MemChecksCount", 10);
     setConfig(CONFIG_UINT32_AC_WARDEN_OTHER_CHECKS_COUNT, "Warden.OtherChecksCount", 6);
 }

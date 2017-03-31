@@ -622,7 +622,7 @@ void WardenWin::HandleData(ByteBuffer &buff)
     if (Head_Result != 0)
     {
         buff.rpos(buff.wpos());
-        sLog.outWarden("WARDEN: Player %s (account: %u) failed read Warden packet header. Player kicked", _session->GetPlayerName(), _session->GetAccountId());
+        sLog.outWarden("WARDEN: Player %s (account: %u) failed read Warden packet header. Player kicked, Head_Result: %u", _session->GetPlayerName(), _session->GetAccountId(), Head_Result);
         _session->KickPlayer();
         return;
     }
@@ -652,23 +652,25 @@ void WardenWin::HandleData(ByteBuffer &buff)
     }
 
     buff.rpos(buff.wpos());
-    sLog.outWarden("WARDEN: Player %s (account: %u) failed check Warden packet header. Player kicked",
-        _session->GetPlayerName(), _session->GetAccountId());
+    /*sLog.outWarden("WARDEN: Player %s (account: %u) failed check Warden packet header. Player kicked",
+        _session->GetPlayerName(), _session->GetAccountId());*/
+
+    sLog.outWarden("WARDEN: Player %s (account: %u) failed check Warden packet header. Player kicked", _session->GetPlayerName(), _session->GetAccountId());
     _session->KickPlayer();
 }
 
 void WardenWin::HandleData2(ByteBuffer &buff)
 {
     ++m_ackIndex;
-    //sLog.outWarden("client packet number - %u, required client packet number - %u", m_ackIndex, m_reqAckIndex);
+    sLog.outWarden("client packet number - %u, required client packet number - %u", m_ackIndex, m_reqAckIndex);
     m_sendLastPacketCount = 0;
 
     if (m_ackIndex != m_reqAckIndex)
     {
         buff.rpos(buff.wpos());
         _checkTimer += 30*IN_MILLISECONDS;
-        //sLog.outWarden("Player %s (account: %u) (latency: %u, IP: %s) failed sync static packets current: %u (req: %u)",
-            //_session->GetPlayerName(), _session->GetAccountId(), _session->GetLatency(), _session->GetRemoteAddress().c_str(), m_ackIndex, m_reqAckIndex);
+        sLog.outDebug("Player %s (account: %u) (latency: %u, IP: %s) failed sync static packets current: %u (req: %u)",
+            _session->GetPlayerName(), _session->GetAccountId(), _session->GetLatency(), _session->GetRemoteAddress().c_str(), m_ackIndex, m_reqAckIndex);
         ++m_failedSyncPacketCount;
         return;
     }
@@ -711,6 +713,8 @@ void WardenWin::HandleData2(ByteBuffer &buff)
         buff >> s_currentModule;
     }*/
 
+    uint16 checkFailed = 0;
+
     ACE_READ_GUARD(ACE_RW_Mutex, g, _wardenStorage._checkStoreLock);
     for (std::list<uint16>::iterator itr = _currentChecks.begin(); itr != _currentChecks.end(); ++itr)
     {
@@ -729,7 +733,7 @@ void WardenWin::HandleData2(ByteBuffer &buff)
                 {
                     sLog.outWarden("RESULT MEM_CHECK not 0x00, CheckId %u account Id %u", *itr, _session->GetAccountId());
                     buff.rpos(buff.wpos());
-                    //sLog.outWarden("Player %s (account: %u) failed Warden check %u. Action: %s", _session->GetPlayerName(), _session->GetAccountId(), *itr, Penalty(rd).c_str());
+                    sLog.outWarden("Player %s (account: %u) failed Warden check %u. Action: %s", _session->GetPlayerName(), _session->GetAccountId(), *itr, Penalty(rd).c_str());
                     _session->KickPlayer();
                     return;
                 }
@@ -762,6 +766,7 @@ void WardenWin::HandleData2(ByteBuffer &buff)
                 }
 
                 buff.rpos(buff.rpos() + rd->length);
+                sLog.outWarden("RESULT MEM_CHECK passed CheckId %u account Id %u", *itr, _session->GetAccountId());
                 break;
             }
             case PAGE_CHECK_A:
@@ -824,7 +829,7 @@ void WardenWin::HandleData2(ByteBuffer &buff)
                 {
                     sLog.outWarden("RESULT MPQ_CHECK not 0x00 account id %u", _session->GetAccountId());
                     buff.rpos(buff.wpos());
-                    //sLog.outWarden("Player %s (account: %u) failed Warden check %u. Action: %s", _session->GetPlayerName(), _session->GetAccountId(), *itr, Penalty(rd).c_str());
+                    sLog.outWarden("Player %s (account: %u) failed Warden check %u. Action: %s", _session->GetPlayerName(), _session->GetAccountId(), *itr, Penalty(rd).c_str());
                     _session->KickPlayer();
                     return;
                 }
@@ -860,7 +865,7 @@ void WardenWin::HandleData3(ByteBuffer &buff)
     {
         buff.rpos(buff.wpos());
         // for debug
-        //sLog->outWarden("RESULT MEM_CHECK not 0x00(get base data), Special check failed on account Id %u", _session->GetAccountId());
+        sLog.outWarden("RESULT MEM_CHECK not 0x00(get base data), Special check failed on account Id %u", _session->GetAccountId());
         // nulled
         ClearOffsets();
         return;
@@ -901,7 +906,7 @@ void WardenWin::HandleData3(ByteBuffer &buff)
         {
             buff.rpos(buff.wpos());
             // for debug
-            //sLog.outWarden("Check Data - %X on account %u, build - %u", check_data, _session->GetAccountId(), clientBuild);
+            sLog.outWarden("Check Data - %X on account %u, build - %u", data, _session->GetAccountId(), clientBuild);
             ClearOffsets();
             // forced timer
             _checkTimer2 = 1*IN_MILLISECONDS;
