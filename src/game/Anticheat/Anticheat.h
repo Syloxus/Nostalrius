@@ -137,6 +137,14 @@ public:
     virtual bool CanWhisper(AccountPersistentData const& data, MasterPlayer* player) { return true; }
 };
 
+#ifndef USE_ANTICHEAT
+
+class AnticheatDefaultLib : public AnticheatLibInterface
+{
+};
+
+#endif
+
 AnticheatLibInterface* GetAnticheatLib();
 
 #define sAnticheatLib (GetAnticheatLib())
