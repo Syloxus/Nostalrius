@@ -964,6 +964,8 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             if (player_tap && !group_tap)
                 group_tap = player_tap->GetGroup();
         }
+        else if (creature->lootForCreator && creature->GetCreatorGuid())
+            player_tap = (Player*)GetUnit(*this, creature->GetCreatorGuid());
         else
             creature->SetLootRecipient(nullptr);
     }
@@ -4581,9 +4583,12 @@ void Unit::RemoveSpellAuraHolder(SpellAuraHolder *holder, AuraRemoveMode mode)
     else
         delete holder;
 
-    if (mode != AURA_REMOVE_BY_EXPIRE && IsChanneledSpell(AurSpellInfo) && !IsAreaOfEffectSpell(AurSpellInfo) && caster)
-        if (caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL) && caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL)->m_spellInfo->Id == auraSpellId)
+    if (mode != AURA_REMOVE_BY_EXPIRE && IsChanneledSpell(AurSpellInfo) && caster)
+    {
+        Spell *channeled = caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL);
+        if (channeled && channeled->m_spellInfo->Id == auraSpellId && channeled->m_targets.getUnitTarget() == this)
             caster->InterruptSpell(CURRENT_CHANNELED_SPELL);
+    }
 }
 
 void Unit::RemoveSingleAuraFromSpellAuraHolder(SpellAuraHolder *holder, SpellEffectIndex index, AuraRemoveMode mode)
