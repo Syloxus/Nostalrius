@@ -30,7 +30,7 @@ class AccountPersistentData;
 struct AreaEntry;
 
 // Generic class for Warden memory queries
-class WardenMemoryQuery
+/*class WardenMemoryQuery
 {
 public:
     WardenMemoryQuery(uint32 address, uint32 length): _address(address), _length(length) {}
@@ -43,7 +43,7 @@ public:
 private:
     uint32 _address;
     uint32 _length;
-};
+};*/
 
 class WardenInterface
 {
@@ -53,15 +53,15 @@ class WardenInterface
         virtual void HandleWardenDataOpcode(WorldPacket & recv_data) {}
         virtual void Update() {}
 
-        virtual void SendSpeedChange(UnitMoveType moveType, float newSpeed) {}
-        virtual void TrackingUpdateSent(uint32 field, uint32 value) {}
+        //virtual void SendSpeedChange(UnitMoveType moveType, float newSpeed) {}
+        //virtual void TrackingUpdateSent(uint32 field, uint32 value) {}
 
         virtual WorldSession* GetSession() { return NULL; }
 
-        virtual void HandleInfoCommand(ChatHandler* handler) {}
+        //virtual void HandleInfoCommand(ChatHandler* handler) {}
 
         // Must be reimplemented
-        virtual void AddMemoryQuery(WardenMemoryQuery* query) { query->DataRead(NULL, this); delete query; }
+        //virtual void AddMemoryQuery(WardenMemoryQuery* query) { query->DataRead(NULL, this); delete query; }
 };
 
 class PlayerAnticheatInterface
@@ -139,7 +139,7 @@ public:
 
 #ifndef USE_ANTICHEAT
 
-class AnticheatDefaultLib : public AnticheatLibInterface
+class AnticheatDefaultLib: public AnticheatLibInterface
 {
 };
 

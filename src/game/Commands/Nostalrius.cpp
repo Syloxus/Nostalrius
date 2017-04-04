@@ -2309,7 +2309,7 @@ bool ChatHandler::HandleAnticheatCommand(char* args)
 
 bool ChatHandler::HandleWardenCommand(char* args)
 {
-    Player* player = NULL;
+    /*Player* player = NULL;
     if (!ExtractPlayerTarget(&args, &player) && m_session)
         player = m_session->GetPlayer();
     if (!player)
@@ -2321,11 +2321,11 @@ bool ChatHandler::HandleWardenCommand(char* args)
         PSendSysMessage("No Warden loaded for account %s", player->GetSession()->GetUsername().c_str());
         return true;
     }
-    warden->HandleInfoCommand(this);
+    warden->HandleInfoCommand(this);*/
     return true;
 }
 
-class WardenCommandReadQuery: public WardenMemoryQuery
+/*class WardenCommandReadQuery: public WardenMemoryQuery
 {
 public:
     WardenCommandReadQuery(uint32 addr, uint32 length, uint32 accountId) : WardenMemoryQuery(addr, length), _accountId(accountId)
@@ -2356,11 +2356,11 @@ public:
     }
 protected:
     uint32 _accountId;
-};
+};*/
 
 bool ChatHandler::HandleWardenReadCommand(char* args)
 {
-    Player* player = getSelectedPlayer();
+    /*Player* player = getSelectedPlayer();
     if (!player)
         return false;
 
@@ -2374,7 +2374,7 @@ bool ChatHandler::HandleWardenReadCommand(char* args)
         PSendSysMessage("No Warden loaded for account %s", player->GetSession()->GetUsername().c_str());
         return true;
     }
-    warden->AddMemoryQuery(new WardenCommandReadQuery(addr, len, GetAccountId()));
+    warden->AddMemoryQuery(new WardenCommandReadQuery(addr, len, GetAccountId()));*/
     return true;
 }
 

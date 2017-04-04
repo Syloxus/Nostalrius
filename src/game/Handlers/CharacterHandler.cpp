@@ -767,10 +767,10 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             pCurrChar->KillPlayer();
     }
 
-    //Update warden speeds
-    if (GetWarden())
-        for (int i = 0; i < MAX_MOVE_TYPE; ++i)
-            GetWarden()->SendSpeedChange(UnitMoveType(i), pCurrChar->GetSpeed(UnitMoveType(i)));
+    // Update warden speeds
+    //if (GetWarden())
+        //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
+            //GetWarden()->SendSpeedChange(UnitMoveType(i), pCurrChar->GetSpeed(UnitMoveType(i)));
 
     ALL_SESSION_SCRIPTS(this, OnLogin(pCurrChar));
 }

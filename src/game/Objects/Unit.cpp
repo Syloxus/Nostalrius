@@ -7781,9 +7781,9 @@ void Unit::SetSpeedRate(UnitMoveType mtype, float rate, bool forced)
                 dataForMe << float(GetSpeed(mtype));
                 me->GetSession()->SendPacket(&dataForMe);
                 me->GetCheatData()->OrderSent(&dataForMe);
-                if (this == me)
-                    if (WardenInterface* warden = me->GetSession()->GetWarden())
-                        warden->SendSpeedChange(mtype, GetSpeed(mtype));
+                //if (this == me)
+                    //if (WardenInterface* warden = me->GetSession()->GetWarden())
+                        //warden->SendSpeedChange(mtype, GetSpeed(mtype));
             }
         }
 

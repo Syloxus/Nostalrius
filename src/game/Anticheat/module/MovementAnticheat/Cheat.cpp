@@ -360,9 +360,6 @@ bool PlayerCheatData::HandleAnticheatTests(MovementInfo& movementInfo, WorldSess
             _jumpcount = 0;
     }
 
-    if (sCheatsMgr->EnableAntiMultiJumpHack())
-        IsWallClimb(movementInfo);
-
     if (opcode == MSG_MOVE_STOP_SWIM && (movementInfo.moveFlags & MOVEFLAG_SWIMMING))
         APPEND_CHEAT(CHEAT_TYPE_FLY_HACK_SWIM);
 
@@ -868,6 +865,16 @@ bool PlayerCheatData::CheckTeleport(uint32 opcode, MovementInfo& movementInfo)
             sLog.outWarden("SERVER WARDEN (MovementFlags hack): player %s had MOVEFLAG_FIXED_Z", me->GetSession()->GetPlayerName());
         }
 
+        // Anti Wall Climb
+        /*if (((moveFlags & MOVEFLAG_WALK_MODE) && ((moveFlags & MOVEFLAG_FORWARD) || (moveFlags & MOVEFLAG_BACKWARD))) && sCheatsMgr->EnableAntiMultiJumpHack())
+        {
+            if (IsWallClimb(movementInfo))
+            {
+                AddCheats(1 << CHEAT_TYPE_WALL_CLIMB);
+                sLog.outWarden("SERVER WARDEN (MovementFlags hack): player %s is using a wall climb hack", me->GetSession()->GetPlayerName());
+            }
+        }*/
+
         // if water walking with no aura and no pending removal order, cheater
         if (moveFlags & MOVEFLAG_WATERWALKING && !me->HasAuraType(SPELL_AURA_WATER_WALK) && !me->HasAuraType(SPELL_AURA_GHOST))
         {
@@ -963,7 +970,7 @@ bool PlayerCheatData::IsTeleportAllowed(MovementInfo const& movementInfo, float&
 
     return false;
 }
-
+/*
 bool PlayerCheatData::IsWallClimb(MovementInfo const& movementInfo)
 {
     if (me->GetTransport() || me->IsFlying() || me->IsFalling() || me->IsSwimming())
@@ -1010,11 +1017,7 @@ bool PlayerCheatData::IsWallClimb(MovementInfo const& movementInfo)
         angle[i] = MapManager::NormalizeOrientation(tan(deltaZ[i] / dist[i]));
 
     if (angle[0] > 1.9f && angle[1] > 1.9f)
-    {
-        AddCheats(1 << CHEAT_TYPE_WALL_CLIMB);
-        sLog.outWarden("SERVER WARDEN (MovementFlags hack): player %s is using a wall climb hack", me->GetSession()->GetPlayerName());
         return true;
-    }
 
     return false;
-}
+}*/

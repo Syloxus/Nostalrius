@@ -14,7 +14,6 @@
 #include "WardenStorageMgr.h"
 #include "Warden.h"
 #include "Util.h"
-#include "module/libanticheat.h"
 
 INSTANTIATE_SINGLETON_1( WardenStorageMgr );
 
@@ -47,12 +46,12 @@ WardenStorageMgr::~WardenStorageMgr()
 void WardenStorageMgr::LoadWardenChecks()
 {
     // Check if Warden is enabled by config before loading anything
-    if (!sAcConfig.getConfig(CONFIG_BOOL_WARDEN_ENABLE))
-    {
-        sLog.outString(">> Warden disabled, loading checks skipped.");
-        sLog.outString();
-        return;
-    }
+    //if (!sWorld.getConfig(CONFIG_BOOL_WARDEN_ENABLE))
+    //{
+        //sLog.outString(">> Warden disabled, loading checks skipped.");
+        //sLog.outString();
+        //return;
+    //}
 
     /*if (!LoadSecurityData())
     {
@@ -61,10 +60,7 @@ void WardenStorageMgr::LoadWardenChecks()
         return;
     }*/
 
-    checkStore.clear();
-    checkResultStore.clear();
-
-    QueryResult *result = LoginDatabase.Query("SELECT id, groupId, type, str, data, address, length, result, result2, build FROM warden_checks ORDER BY build ASC, id ASC");
+    QueryResult *result = LoginDatabase.Query("SELECT MAX(id) FROM warden_checks");
 
     if (!result)
     {
@@ -72,6 +68,11 @@ void WardenStorageMgr::LoadWardenChecks()
         sLog.outString();
         return;
     }
+
+    checkStore.clear();
+    checkResultStore.clear();
+
+    result = LoginDatabase.Query("SELECT id, groupId, type, str, data, address, length, result, result2, build FROM warden_checks ORDER BY id ASC");
 
     uint32 count = 0;
     do
