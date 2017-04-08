@@ -15,7 +15,7 @@
 
 namespace Movement
 {
-    extern float computeFallElevation(float time, bool safeFall, float initialSpeed);
+extern float computeFallElevation(float time, bool safeFall, float initialSpeed);
 }
 
 const char* GetCheatTypeNameFromFlag(CheatType flagId)
@@ -539,6 +539,7 @@ void PlayerCheatData::InitSpeeds(Unit* unit)
         _clientSpeeds[i] = unit->GetSpeed(UnitMoveType(i));
 }
 
+
 void PlayerCheatData::Unreachable(Unit* attacker)
 {
     if (IsInKnockBack())
@@ -866,14 +867,14 @@ bool PlayerCheatData::CheckTeleport(uint32 opcode, MovementInfo& movementInfo)
         }
 
         // Anti Wall Climb
-        /*if (((moveFlags & MOVEFLAG_WALK_MODE) && ((moveFlags & MOVEFLAG_FORWARD) || (moveFlags & MOVEFLAG_BACKWARD))) && sCheatsMgr->EnableAntiMultiJumpHack())
+        if (((moveFlags & MOVEFLAG_WALK_MODE) && ((moveFlags & MOVEFLAG_FORWARD) || (moveFlags & MOVEFLAG_BACKWARD))) && sCheatsMgr->EnableAntiMultiJumpHack())
         {
             if (IsWallClimb(movementInfo))
             {
                 AddCheats(1 << CHEAT_TYPE_WALL_CLIMB);
                 sLog.outWarden("SERVER WARDEN (MovementFlags hack): player %s is using a wall climb hack", me->GetSession()->GetPlayerName());
             }
-        }*/
+        }
 
         // if water walking with no aura and no pending removal order, cheater
         if (moveFlags & MOVEFLAG_WATERWALKING && !me->HasAuraType(SPELL_AURA_WATER_WALK) && !me->HasAuraType(SPELL_AURA_GHOST))
@@ -970,7 +971,7 @@ bool PlayerCheatData::IsTeleportAllowed(MovementInfo const& movementInfo, float&
 
     return false;
 }
-/*
+
 bool PlayerCheatData::IsWallClimb(MovementInfo const& movementInfo)
 {
     if (me->GetTransport() || me->IsFlying() || me->IsFalling() || me->IsSwimming())
@@ -1020,4 +1021,4 @@ bool PlayerCheatData::IsWallClimb(MovementInfo const& movementInfo)
         return true;
 
     return false;
-}*/
+}

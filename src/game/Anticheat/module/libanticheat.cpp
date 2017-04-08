@@ -13,9 +13,6 @@
 
 #include "Antispam/Antispam.h"
 #include "MovementAnticheat/Cheat.h"
-#include "WardenAnticheat/Warden.h"
-#include "WardenAnticheat/WardenWin.h"
-#include "WardenAnticheat/WardenMac.h"
 
 INSTANTIATE_SINGLETON_1(AnticheatConfig);
 
@@ -26,12 +23,6 @@ void NostalriusAnticheatLib::LoadAnticheatData()
 
     sLog.outString("Loading anticheat system ...");
     sCheatsMgr->LoadFromDB();
-
-    sLog.outString("Loading warden checks...");
-    _wardenStorage.LoadWardenChecks();
-
-    sLog.outString("Loading warden penalties...");
-    _wardenStorage.LoadWardenPenalty();
 }
 
 void NostalriusAnticheatLib::LoadConfig()
@@ -49,23 +40,6 @@ PlayerAnticheatInterface* NostalriusAnticheatLib::CreateAnticheatFor(Player* pla
     PlayerCheatData* cd = new PlayerCheatData(player);
     cd->Init();
     return cd;
-}
-
-WardenInterface* NostalriusAnticheatLib::CreateWardenFor(WorldSession* client, BigNumber* K)
-{
-    Warden* _warden;
-    ClientOSType os = client->GetOS();
-
-    if (os == CLIENT_OS_MAC)
-        _warden = new WardenMac();
-    else if (os == CLIENT_OS_WIN)
-        _warden = new WardenWin();
-    else
-        return nullptr;
-
-    _warden->Init(client, K);
-
-    return _warden;
 }
 
 NostalriusAnticheatLib* NostalriusAnticheatLib::instance()
@@ -120,8 +94,6 @@ void AnticheatConfig::loadConfigSettings()
     setConfig(CONFIG_UINT32_AC_ANTISPAM_MESSAGE_BLOCK_SIZE, "Antispam.MessageBlockSize", 5);
     setConfig(CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_TIME, "Antispam.FrequencyTime", 3);
     setConfig(CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_COUNT, "Antispam.FrequencyCount", 3);
-    setConfig(CONFIG_UINT32_AC_WARDEN_MEM_CHECKS_COUNT, "Warden.MemChecksCount", 10);
-    setConfig(CONFIG_UINT32_AC_WARDEN_OTHER_CHECKS_COUNT, "Warden.OtherChecksCount", 6);
 }
 
 void AnticheatConfig::setConfig(AnticheatConfigInt32Values index, char const* fieldname, int32 defvalue)
