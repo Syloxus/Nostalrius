@@ -30,7 +30,7 @@ class AccountPersistentData;
 struct AreaEntry;
 
 // Generic class for Warden memory queries
-/*class WardenMemoryQuery
+class WardenMemoryQuery
 {
 public:
     WardenMemoryQuery(uint32 address, uint32 length): _address(address), _length(length) {}
@@ -43,7 +43,7 @@ public:
 private:
     uint32 _address;
     uint32 _length;
-};*/
+};
 
 class WardenInterface
 {
@@ -58,7 +58,7 @@ class WardenInterface
 
         virtual WorldSession* GetSession() { return NULL; }
 
-        //virtual void HandleInfoCommand(ChatHandler* handler) {}
+        virtual void HandleInfoCommand(ChatHandler* handler) {}
 
         // Must be reimplemented
         //virtual void AddMemoryQuery(WardenMemoryQuery* query) { query->DataRead(NULL, this); delete query; }

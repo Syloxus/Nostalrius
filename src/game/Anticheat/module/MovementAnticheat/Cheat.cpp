@@ -320,6 +320,10 @@ bool PlayerCheatData::HandleAnticheatTests(MovementInfo& movementInfo, WorldSess
     if (!sCheatsMgr->EnableAnticheat() || me != session->GetPlayer())
         return true;
 
+    // Disable if it is a game master
+    if (session->GetPlayer()->isGameMaster())
+        return true;
+
     uint32 cheatType = 0x0;
 #define APPEND_CHEAT(t) cheatType |= (1 << t)
 
@@ -867,7 +871,7 @@ bool PlayerCheatData::CheckTeleport(uint32 opcode, MovementInfo& movementInfo)
         }
 
         // Anti Wall Climb
-        if (((moveFlags & MOVEFLAG_WALK_MODE) && ((moveFlags & MOVEFLAG_FORWARD) || (moveFlags & MOVEFLAG_BACKWARD))) && sCheatsMgr->EnableAntiMultiJumpHack())
+        if ((moveFlags & MOVEFLAG_FORWARD) || (moveFlags & MOVEFLAG_BACKWARD))
         {
             if (IsWallClimb(movementInfo))
             {
@@ -982,8 +986,8 @@ bool PlayerCheatData::IsWallClimb(MovementInfo const& movementInfo)
     float floor_z[2];
     float angle[2];
 
-    float deltaX = me->GetPositionX() - movementInfo.pos.x;
-    float deltaY = me->GetPositionY() - movementInfo.pos.y;
+    float deltaX = GetLastMovementInfo().pos.x - movementInfo.pos.x;
+    float deltaY = GetLastMovementInfo().pos.y - movementInfo.pos.y;
     m_MoveDist = sqrt((deltaX * deltaX) + (deltaY * deltaY)); // Traveled distance
 
     dist[0] = m_MoveDist;
@@ -991,10 +995,10 @@ bool PlayerCheatData::IsWallClimb(MovementInfo const& movementInfo)
     float Size = me->GetObjectBoundingRadius();
     dist[1] = Size * 2;
 
-    float x = me->GetPositionX();
-    float y = me->GetPositionY();
-    float z = me->GetPositionZ();
-    float o = me->GetOrientation();
+    float x = movementInfo.pos.x;
+    float y = movementInfo.pos.y;
+    float z = movementInfo.pos.z;
+    float o = movementInfo.pos.o;
 
     Map* pMap = me->GetMap();
 

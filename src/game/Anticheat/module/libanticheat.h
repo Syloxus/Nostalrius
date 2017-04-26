@@ -18,6 +18,7 @@ class NostalriusAnticheatLib: public AnticheatLibInterface
 
         void LoadConfig();
         PlayerAnticheatInterface* CreateAnticheatFor(Player* player);
+        //WardenInterface * CreateWardenFor(WorldSession* client, BigNumber* K);
 
         AntispamInterface* GetAntispam() const;
 
@@ -45,6 +46,8 @@ enum AnticheatConfigUInt32Values
     CONFIG_UINT32_AC_ANTISPAM_MESSAGE_BLOCK_SIZE,
     CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_TIME,
     CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_COUNT,
+    CONFIG_UINT32_AC_WARDEN_MEM_CHECKS_COUNT,
+    CONFIG_UINT32_AC_WARDEN_OTHER_CHECKS_COUNT,
     CONFIG_UINT32_AC_COUNT
 };
 
@@ -61,6 +64,7 @@ enum AnticheatConfigBoolValues
     CONFIG_BOOL_AC_ANTISPAM_ENABLED,
     CONFIG_BOOL_AC_ANTISPAM_BAN_ENABLED,
     CONFIG_BOOL_AC_ANTISPAM_MERGE_ALL_WHISPERS,
+    CONFIG_BOOL_WARDEN_ENABLE,
     CONFIG_BOOL_AC_COUNT
 };
 
