@@ -5057,8 +5057,7 @@ void Unit::ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVic
 
     // Now go on with a victim's events'n'auras
     // Not much to do if no flags are set or there is no victim
-    // Don't proc victim auras if its a miss / resist
-    if (pVictim && pVictim->isAlive() && procVictim && !(PROC_EX_RESIST & procExtra) && !(PROC_EX_MISS & procExtra))
+    if (pVictim && pVictim->isAlive() && procVictim)
         pVictim->ProcDamageAndSpellFor(true, this, procVictim, procExtra, attType, procSpell, amount, procTriggered, spell);
 
     HandleTriggers(pVictim, procExtra, amount, procSpell, procTriggered);
@@ -6799,7 +6798,8 @@ uint32 Unit::MeleeDamageBonusDone(Unit* pVictim, uint32 pdamage, WeaponAttackTyp
         for (AuraList::const_iterator i = mModDamageDone.begin(); i != mModDamageDone.end(); ++i)
         {
             if ((*i)->GetModifier()->m_miscvalue & schoolMask &&                         // schoolmask has to fit with the intrinsic spell school
-                    (*i)->GetModifier()->m_miscvalue & GetMeleeDamageSchoolMask() &&         // AND schoolmask has to fit with weapon damage school (essential for non-physical spells)
+                    ((*i)->GetModifier()->m_miscvalue & GetMeleeDamageSchoolMask() ||    // AND schoolmask has to fit with weapon damage school (essential for non-physical spells)
+                     spellProto->DmgClass == SPELL_DAMAGE_CLASS_RANGED) &&               // Some ranged physical attacks use magic damage, ex. Arcane Shot
                     (((*i)->GetSpellProto()->EquippedItemClass == -1) ||                     // general, weapon independent
                      (pWeapon && pWeapon->IsFitToSpellRequirements((*i)->GetSpellProto()))))  // OR used weapon fits aura requirements
                 DoneFlat += (*i)->GetModifier()->m_amount;
