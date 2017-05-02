@@ -14,9 +14,9 @@
 #include "Antispam/Antispam.h"
 #include "MovementAnticheat/Cheat.h"
 
-/*#include "WardenAnticheat/Warden.h"
+#include "WardenAnticheat/Warden.h"
 #include "WardenAnticheat/WardenWin.h"
-#include "WardenAnticheat/WardenMac.h"*/
+#include "WardenAnticheat/WardenMac.h"
 
 INSTANTIATE_SINGLETON_1(AnticheatConfig);
 
@@ -28,11 +28,11 @@ void NostalriusAnticheatLib::LoadAnticheatData()
     sLog.outString("Loading anticheat system ...");
     sCheatsMgr->LoadFromDB();
 
-    /*sLog.outString("Loading warden checks...");
+    sLog.outString("Loading warden checks...");
     _wardenStorage.LoadWardenChecks();
 
     sLog.outString("Loading warden penalties...");
-    _wardenStorage.LoadWardenPenalty();*/
+    _wardenStorage.LoadWardenPenalty();
 }
 
 void NostalriusAnticheatLib::LoadConfig()
@@ -52,7 +52,7 @@ PlayerAnticheatInterface* NostalriusAnticheatLib::CreateAnticheatFor(Player* pla
     return cd;
 }
 
-/*WardenInterface* NostalriusAnticheatLib::CreateWardenFor(WorldSession* client, BigNumber* K)
+WardenInterface* NostalriusAnticheatLib::CreateWardenFor(WorldSession* client, BigNumber* K)
 {
     Warden* _warden;
     ClientOSType os = client->GetOS();
@@ -67,7 +67,7 @@ PlayerAnticheatInterface* NostalriusAnticheatLib::CreateAnticheatFor(Player* pla
     _warden->Init(client, K);
 
     return _warden;
-}*/
+}
 
 NostalriusAnticheatLib* NostalriusAnticheatLib::instance()
 {

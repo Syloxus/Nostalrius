@@ -18,7 +18,7 @@ class NostalriusAnticheatLib: public AnticheatLibInterface
 
         void LoadConfig();
         PlayerAnticheatInterface* CreateAnticheatFor(Player* player);
-        //WardenInterface * CreateWardenFor(WorldSession* client, BigNumber* K);
+        WardenInterface * CreateWardenFor(WorldSession* client, BigNumber* K);
 
         AntispamInterface* GetAntispam() const;
 

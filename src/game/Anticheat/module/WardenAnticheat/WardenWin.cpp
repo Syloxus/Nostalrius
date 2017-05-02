@@ -325,10 +325,15 @@ void WardenWin::RequestData()
     // header
     wd = _wardenStorage.GetCheckDataById(1, clientBuild, true);
 
-    buff << uint8(MEM_CHECK ^ xorByte);
-    buff << uint8(0x00);
-    buff << uint32(wd->address);
-    buff << uint8(wd->length);
+    if (wd)
+    {
+        buff << uint8(MEM_CHECK ^ xorByte);
+        buff << uint8(0x00);
+        buff << uint32(wd->address);
+        buff << uint8(wd->length);
+    }
+    else
+        sLog.outDebug("SERVER WARDEN: id not found!");
 
     // test native calls of module function - DISABLED IT
     /*if (s_currentModule == 0x00 && s_currentModulePtr == 0x00)
