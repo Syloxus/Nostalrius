@@ -1,8 +1,4 @@
-﻿/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
+﻿DROP TABLE `playerstart_spell`;
 -- Structuur van  tabel playerlowstart_spell wordt geschreven
 CREATE TABLE IF NOT EXISTS `playerlowstart_spell` (
   `class` int(11) DEFAULT '0',
@@ -95,9 +91,8 @@ INSERT IGNORE INTO `playerlowstart_spell` (`class`, `spell`, `race`) VALUES
 	(11, 198, 4),
 	(11, 199, 0),
 	(11, 1180, 6);
-/*!40000 ALTER TABLE `playerlowstart_spell` ENABLE KEYS */;
 
-
+DROP TABLE `playerstart_equip`;
 -- Structuur van  tabel playerstart_equip wordt geschreven
 CREATE TABLE IF NOT EXISTS `playerstart_equip` (
   `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -249,9 +244,8 @@ INSERT IGNORE INTO `playerstart_equip` (`class`, `item`, `slot`) VALUES
 	(11, 30066, 7),
 	(11, 30067, 6),
 	(11, 30068, 21);
-/*!40000 ALTER TABLE `playerstart_equip` ENABLE KEYS */;
 
-
+DROP TABLE `playerstart_equip2`;
 -- Structuur van  tabel playerstart_equip2 wordt geschreven
 CREATE TABLE IF NOT EXISTS `playerstart_equip2` (
   `entry` mediumint(8) NOT NULL DEFAULT '0',
@@ -386,9 +380,8 @@ INSERT IGNORE INTO `playerstart_equip2` (`entry`, `class`, `item`, `itemAmount`,
 	(3017, 3, 2102, 1, 21),
 	(3018, 3, 2101, 1, 21),
 	(9013, 9, 30063, 1, 21);
-/*!40000 ALTER TABLE `playerstart_equip2` ENABLE KEYS */;
 
-
+DROP TABLE `playerstart_equip3`;
 -- Structuur van  tabel playerstart_equip3 wordt geschreven
 CREATE TABLE IF NOT EXISTS `playerstart_equip3` (
   `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -398,7 +391,6 @@ CREATE TABLE IF NOT EXISTS `playerstart_equip3` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Robot up : stuff';
 
 -- Dumpen data van tabel playerstart_equip3: 139 rows
-/*!40000 ALTER TABLE `playerstart_equip3` DISABLE KEYS */;
 INSERT IGNORE INTO `playerstart_equip3` (`class`, `item`, `slot`) VALUES
 	(1, 60005, 21),
 	(1, 60007, 4),
@@ -539,7 +531,6 @@ INSERT IGNORE INTO `playerstart_equip3` (`class`, `item`, `slot`) VALUES
 	(11, 60061, 21),
 	(11, 60067, 10),
 	(11, 60070, 7);
-/*!40000 ALTER TABLE `playerstart_equip3` ENABLE KEYS */;
 
 
 -- Structuur van  tabel playerstart_spell wordt geschreven
@@ -1852,7 +1843,3 @@ INSERT IGNORE INTO `playerstart_spell` (`class`, `spell`, `race`) VALUES
 	(11, 22895, 0),
 	(11, 22896, 0),
 	(11, 29166, 0);
-/*!40000 ALTER TABLE `playerstart_spell` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
